@@ -3,7 +3,8 @@
   "title": "XRPL EVM Governance",
   "extra": {
     "profile": true,
-    "graphqlWs": false
+    "graphqlWs": false,
+    "votingPowerExponent": 6
   },
   "previewImage": "https://peersyst-development.s3.eu-west-1.amazonaws.com/validators-explorer-preview.png",
   "themes": {

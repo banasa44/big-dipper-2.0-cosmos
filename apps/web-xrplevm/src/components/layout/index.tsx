@@ -4,8 +4,6 @@ import Footer from '@/components/footer';
 import useStyles from '@/components/layout/styles';
 import type { LayoutProps } from '@/components/layout/types';
 import Nav from '@/components/nav';
-import Typography from '@mui/material/Typography';
-import useAppTranslation from '@/hooks/useAppTranslation';
 
 const bannerLinks = getBannersLinks();
 
@@ -22,7 +20,6 @@ const transition: Transition = {
 const Layout = (props: LayoutProps) => {
   const { classes, cx } = useStyles();
   const { children, navTitle, className } = props;
-  const { t } = useAppTranslation('validators');
 
   return (
     <motion.div

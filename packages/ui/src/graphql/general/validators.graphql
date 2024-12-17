@@ -8,6 +8,14 @@ query Validators {
       jailed
       height
     }
+    validatorDescriptions: validator_descriptions {
+      moniker
+      identity
+      avatarUrl: avatar_url
+      website
+      securityContact: security_contact
+      details
+    }
     validatorSigningInfos: validator_signing_infos(order_by: {height: desc}, limit: 1) {
       missedBlocksCounter: missed_blocks_counter
       tombstoned
