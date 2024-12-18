@@ -356,66 +356,12 @@ const customTypeToModel = {
   // ========================
   // profiles
   // ========================
-  '/desmos.profiles.v3.MsgSaveProfile': {
-    model: MODELS.MsgSaveProfile,
-    content: COMPONENTS.SaveProfile,
-    tagTheme: 'four',
-    tagDisplay: 'txSaveProfileLabel',
+  '/ethermint.evm.v1.MsgEthereumTx': {
+    model: MODELS.MsgEthereumTx,
+    content: COMPONENTS.MsgEthereumTx,
+    tagTheme: 'sixteen',
+    tagDisplay: 'MsgEthereumTx',
   },
-  '/desmos.profiles.v3.MsgDeleteProfile': {
-    model: MODELS.MsgDeleteProfile,
-    content: COMPONENTS.DeleteProfile,
-    tagTheme: 'four',
-    tagDisplay: 'txDeleteProfileLabel',
-  },
-  '/desmos.profiles.v3.MsgCreateRelationship': {
-    model: MODELS.MsgCreateRelationship,
-    content: COMPONENTS.CreateRelationship,
-    tagTheme: 'four',
-    tagDisplay: 'txCreateRelationshipLabel',
-  },
-  '/desmos.profiles.v3.MsgRequestDTagTransfer': {
-    model: MODELS.MsgDtagTransferRequest,
-    content: COMPONENTS.DtagTransferRequest,
-    tagTheme: 'four',
-    tagDisplay: 'txRequestDTagTransferLabel',
-  },
-  '/desmos.profiles.v3.MsgAcceptDTagTransfer': {
-    model: MODELS.MsgDtagAcceptTransfer,
-    content: COMPONENTS.DtagAcceptTransfer,
-    tagTheme: 'four',
-    tagDisplay: 'txAcceptDTagTransferLabel',
-  },
-  '/desmos.profiles.v3.MsgCancelDTagTransfer': {
-    model: MODELS.MsgDtagCancelTransfer,
-    content: COMPONENTS.DtagCancelTransfer,
-    tagTheme: 'four',
-    tagDisplay: 'txCancelDTagTransferLabel',
-  },
-  '/desmos.profiles.v3.MsgRefuseDTagTransfer': {
-    model: MODELS.MsgDtagRefuseTransfer,
-    content: COMPONENTS.DtagRefuseTransfer,
-    tagTheme: 'four',
-    tagDisplay: 'txRefuseDTagTransferLabel',
-  },
-  '/desmos.profiles.v3.MsgBlockUser': {
-    model: MODELS.MsgBlockUser,
-    content: COMPONENTS.BlockUser,
-    tagTheme: 'four',
-    tagDisplay: 'txBlockUserLabel',
-  },
-  '/desmos.profiles.v3.MsgUnblockUser': {
-    model: MODELS.MsgUnblockUser,
-    content: COMPONENTS.UnBlockUser,
-    tagTheme: 'four',
-    tagDisplay: 'txUnblockUserLabel',
-  },
-  // '/ethermint.evm.v1.MsgEthereumTx': {
-  //   model: MODELS.MsgUnblockUser,
-  //   content: COMPONENTS.UnBlockUser,
-  //   tagTheme: 'four',
-  //   tagDisplay: 'txEthereumTxLabel',
-  // },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 
@@ -499,6 +445,7 @@ export const convertMsgsToModels = (
   const messages =
     transaction?.messages?.map((msg: object, i: number) => {
       const model = getMessageModelByType(R.pathOr<string>('', ['@type'], msg));
+
       if (model === MODELS.MsgWithdrawDelegatorReward) {
         const log = transaction?.logs?.[i];
         return MODELS.MsgWithdrawDelegatorReward.fromJson(msg, log);
