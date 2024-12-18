@@ -24,7 +24,7 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
 
   const networks: Network[] = [
     {
-      logo: 'https://livenet.xrpl.org/apple-touch-icon.png',
+      logo: '/xrplevm/images/xrpl-evm-logo.png',
       name: 'XRPL Explorer',
       mainnet: [],
       testnet: [],
@@ -53,7 +53,14 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
     <div className={className}>
       {networks.map((x) => (
         <div className={classes.networkList} key={x.name}>
-          <Image width={0} height={0} className={classes.img} src={x.logo} alt="logo" unoptimized />
+          <Image
+            width={200}
+            height={100}
+            className={classes.img}
+            src={x.logo}
+            alt="logo"
+            unoptimized
+          />
           <div className="network">
             <Typography variant="h4">{x.name}</Typography>
             {x.mainnet.map((network) => (
