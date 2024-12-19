@@ -410,12 +410,6 @@ const customTypeToModel = {
     tagTheme: 'four',
     tagDisplay: 'txUnblockUserLabel',
   },
-  // '/ethermint.evm.v1.MsgEthereumTx': {
-  //   model: MODELS.MsgUnblockUser,
-  //   content: COMPONENTS.UnBlockUser,
-  //   tagTheme: 'four',
-  //   tagDisplay: 'txEthereumTxLabel',
-  // },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 
