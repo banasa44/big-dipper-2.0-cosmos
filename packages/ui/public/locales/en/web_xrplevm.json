@@ -1,0 +1,3 @@
+{
+  "message_contents.MsgEthereumTx": "EVM call to {{to}} with value {{value}}"
+}
