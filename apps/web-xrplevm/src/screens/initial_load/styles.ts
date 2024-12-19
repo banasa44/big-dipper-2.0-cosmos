@@ -18,16 +18,23 @@ const useStyles = makeStyles()((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    maxWidth: '300px',
   },
   logo: {
-    width: '100%',
+    width: '100px',
     [theme.breakpoints.up('sm')]: {
-      width: '300px',
+      width: '100px',
     },
   },
   divider: {
     margin: theme.spacing(2, 0),
     width: '100%',
+  },
+  logoContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 

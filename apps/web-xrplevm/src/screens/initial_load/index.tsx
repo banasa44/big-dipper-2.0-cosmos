@@ -13,7 +13,9 @@ const InitialLoad = () => {
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <ChainIcon type="logo" className={classes.logo} alt="logo" />
+        <div className={classes.logoContainer}>
+          <ChainIcon type="logo" className={classes.logo} alt="logo" />
+        </div>
         <LinearProgress className={classes.divider} />
         {theme === 'light' ? <XrplLogoBlack /> : <XrplLogoWhite />}
       </div>
