@@ -359,7 +359,7 @@ const customTypeToModel = {
   '/ethermint.evm.v1.MsgEthereumTx': {
     model: MODELS.MsgEthereumTx,
     content: COMPONENTS.MsgEthereumTx,
-    tagTheme: 'sixteen',
+    tagTheme: 'six',
     tagDisplay: 'MsgEthereumTx',
   },
 };

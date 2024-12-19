@@ -22,7 +22,7 @@ class MsgEthereumTx {
 
   public type: string;
 
-  public data: MsgEthereumTxData[];
+  public data: MsgEthereumTxData;
 
   public size: number;
 
@@ -30,17 +30,37 @@ class MsgEthereumTx {
 
   public from: string;
 
-  constructor(type: string, data: MsgEthereumTxData[], size: number, hash: string, from: string) {
+  public json: object;
+
+  constructor(
+    type: string,
+    data: MsgEthereumTxData,
+    size: number,
+    hash: string,
+    from: string,
+    json: any
+  ) {
     this.category = 'xrpl-evm';
     this.type = type;
     this.data = data;
     this.size = size;
     this.hash = hash;
     this.from = from;
+    this.json = json;
   }
 
   static fromJson(object: any): MsgEthereumTx {
-    return new MsgEthereumTx(object['@type'], object.data, object.size, object.hash, object.from);
+    const message = {} as MsgEthereumTx;
+
+    message.category = 'xrpl-evm';
+    message.type = object['@type'];
+    message.data = object.data;
+    message.size = object.size;
+    message.hash = object.hash;
+    message.from = object.from;
+    message.json = object;
+
+    return message;
   }
 }
 /* eslint-enable */

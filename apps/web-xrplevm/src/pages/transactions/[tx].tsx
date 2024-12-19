@@ -10,7 +10,8 @@ export const getStaticProps = withGetStaticProps(
   nextI18NextConfig,
   'transactions',
   'message_labels',
-  'message_contents'
+  'message_contents',
+  'home'
 );
 
 export default TransactionDetailsPage;
