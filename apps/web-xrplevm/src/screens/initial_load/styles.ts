@@ -3,6 +3,7 @@ import { makeStyles } from 'tss-react/mui';
 const useStyles = makeStyles()((theme) => ({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
@@ -11,23 +12,24 @@ const useStyles = makeStyles()((theme) => ({
     position: 'fixed',
     zIndex: 10000000,
     backgroundColor: theme.palette.background.default,
-    '& svg': {
-      width: '100%',
-    },
-    [theme.breakpoints.up('sm')]: {
-      '& svg': {
-        width: '300px',
-      },
-    },
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: '300px',
   },
   logo: {
-    width: '100%',
+    width: '100px',
     [theme.breakpoints.up('sm')]: {
-      width: '150px',
+      width: '100px',
     },
   },
   divider: {
     margin: theme.spacing(2, 0),
+    width: '100%',
   },
   logoContainer: {
     display: 'flex',
