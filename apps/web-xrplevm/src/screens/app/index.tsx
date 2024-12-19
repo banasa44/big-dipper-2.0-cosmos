@@ -26,11 +26,11 @@ function MyApp(props: MainProps<{ initialApolloState?: NormalizedCacheObject }>)
       <DefaultSeo
         titleTemplate="XRPL EVM Sidechain Governance"
         title={`XRPL EVM Sidechain Governance | ${title}`}
-        description=""
+        description="Explore the XRPL EVM Sidechain Governance, a decentralized platform for community governance."
         openGraph={{
-          title:
+          title: 'XRPL EVM Sidechain Governance',
+          description:
             'Explore the XRPL EVM Sidechain Governance, a decentralized platform for community governance.',
-          description: '',
           url: location,
           ...OPEN_GRAPH_SEO,
         }}
