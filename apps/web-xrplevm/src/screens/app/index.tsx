@@ -10,7 +10,6 @@ import {
   TWITTER_SEO,
 } from '@/screens/app/utils';
 import { ApolloProvider, NormalizedCacheObject } from '@apollo/client';
-// import useAppTranslation from '@/hooks/useAppTranslation';
 import { DefaultSeo } from 'next-seo';
 import { RecoilRoot } from 'recoil';
 
@@ -20,18 +19,18 @@ function MyApp(props: MainProps<{ initialApolloState?: NormalizedCacheObject }>)
   useApp();
   const { pageProps } = props;
   const apolloClient = useApollo(pageProps.initialApolloState);
-  // const { t } = useAppTranslation();
   const { location } = useWindowOrigin();
 
   return (
     <RecoilRoot>
       <DefaultSeo
-        titleTemplate="XRPL EVM Sidechain Governance"
-        title={`XRPL EVM Sidechain Governance | ${title}`}
-        description={'XRPL EVM Sidechain Governance' ?? undefined}
+        titleTemplate="XRPL EVM Governance"
+        title={`XRPL EVM Governance | ${title}`}
+        description="Explore the XRPL EVM Governance, a decentralized platform for community governance."
         openGraph={{
-          title: `XRPL EVM Sidechain Governance`,
-          description: 'XRPL EVM Sidechain Governance' ?? undefined,
+          title: 'XRPL EVM Governance',
+          description:
+            'Explore the XRPL EVM Governance, a decentralized platform for community governance.',
           url: location,
           ...OPEN_GRAPH_SEO,
         }}
