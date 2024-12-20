@@ -17,7 +17,11 @@ const EthereumTx = (props: { message: MsgEthereumTx }) => {
           value: message.data.value,
         })}
       </Typography>
-      <Link href={`https://explorer.xrplevm.org/tx/${message.hash}`} target="_blank">
+      <Link
+        href={`https://explorer.xrplevm.org/tx/${message.hash}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         {tHome('seeMore')}
       </Link>
     </>

@@ -40,7 +40,7 @@ class MsgEthereumTx {
     from: string,
     json: any
   ) {
-    this.category = 'xrpl-evm';
+    this.category = 'ethereum';
     this.type = type;
     this.data = data;
     this.size = size;
@@ -52,7 +52,7 @@ class MsgEthereumTx {
   static fromJson(object: any): MsgEthereumTx {
     const message = {} as MsgEthereumTx;
 
-    message.category = 'xrpl-evm';
+    message.category = 'ethereum';
     message.type = object['@type'];
     message.data = object.data;
     message.size = object.size;
