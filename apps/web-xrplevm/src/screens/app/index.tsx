@@ -24,13 +24,13 @@ function MyApp(props: MainProps<{ initialApolloState?: NormalizedCacheObject }>)
   return (
     <RecoilRoot>
       <DefaultSeo
-        titleTemplate="XRPL EVM Sidechain Governance"
-        title={`XRPL EVM Sidechain Governance | ${title}`}
-        description="Explore the XRPL EVM Sidechain Governance, a decentralized platform for community governance."
+        titleTemplate="XRPL EVM Governance"
+        title={`XRPL EVM Governance | ${title}`}
+        description="Explore the XRPL EVM Governance, a decentralized platform for community governance."
         openGraph={{
-          title: 'XRPL EVM Sidechain Governance',
+          title: 'XRPL EVM Governance',
           description:
-            'Explore the XRPL EVM Sidechain Governance, a decentralized platform for community governance.',
+            'Explore the XRPL EVM Governance, a decentralized platform for community governance.',
           url: location,
           ...OPEN_GRAPH_SEO,
         }}
