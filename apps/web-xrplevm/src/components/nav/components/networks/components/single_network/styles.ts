@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
       opacity: 0.5,
     },
     '&.testnet': {
-      background: theme.palette.custom.primaryData.three,
+      background: theme.palette.custom.primaryData.one,
     },
     '&.mainnet': {
       background: theme.palette.primary.main,

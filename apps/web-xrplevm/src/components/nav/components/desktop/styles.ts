@@ -15,9 +15,7 @@ const useStyles = makeStyles()((theme) => {
       width: '11.875rem',
       boxSizing: 'content-box',
       padding: theme.spacing(2, 1.75, 2),
-      '&:hover': {
-        cursor: 'pointer',
-      },
+      cursor: 'pointer',
     },
     appBar: {
       '&&': {
