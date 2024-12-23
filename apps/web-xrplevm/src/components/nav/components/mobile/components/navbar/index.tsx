@@ -6,8 +6,8 @@ import { HOME } from '@/utils/go_to_page';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
-import BigDipperLogoRed from 'shared-utils/assets/big-dipper-red.svg';
-import BigDipperLogoWhite from 'shared-utils/assets/big-dipper-white.svg';
+import XrplLogoBlack from 'shared-utils/assets/xrpl-evm-black.svg';
+import XrplLogoWhite from 'shared-utils/assets/xrpl-evm-white.svg';
 
 const Navbar = (props: NavbarProps) => {
   const { classes, cx } = useStyles();
@@ -19,9 +19,9 @@ const Navbar = (props: NavbarProps) => {
     <div className={classes.root}>
       <Link shallow href={HOME} className={classes.a}>
         {theme === 'light' ? (
-          <BigDipperLogoRed className={classes.logo} />
+          <XrplLogoBlack className={classes.logo} />
         ) : (
-          <BigDipperLogoWhite className={classes.logo} />
+          <XrplLogoWhite className={classes.logo} />
         )}
       </Link>
       <div className={classes.actions}>

@@ -25,26 +25,27 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
   const networks: Network[] = [
     {
       logo: '/xrplevm/images/xrpl-evm-logo.png',
-      name: 'XRPL Explorer',
-      mainnet: [],
-      testnet: [],
-      retired: [
-        {
-          chainId: 'xrpl-devnet',
-          url: 'https://explorer.xrplevm.org/',
-          name: 'Devnet',
-        },
-      ],
-      other: [
+      name: 'XRPL',
+      mainnet: [
         {
           chainId: 'xrpl-mainnet',
           url: 'https://livenet.xrpl.org/',
           name: 'Mainnet',
         },
+      ],
+      testnet: [
         {
           chainId: 'xrpl-testnet',
           url: 'https://testnet.xrpl.org/',
           name: 'Testnet',
+        },
+      ],
+      retired: [],
+      other: [
+        {
+          chainId: 'xrpl-devnet',
+          url: 'https://explorer.xrplevm.org/',
+          name: 'Devnet',
         },
       ],
     },
@@ -54,8 +55,8 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
       {networks.map((x) => (
         <div className={classes.networkList} key={x.name}>
           <Image
-            width={200}
-            height={100}
+            width={6}
+            height={26}
             className={classes.img}
             src={x.logo}
             alt="logo"

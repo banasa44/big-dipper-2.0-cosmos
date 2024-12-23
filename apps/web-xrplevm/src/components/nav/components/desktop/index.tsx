@@ -24,16 +24,6 @@ const Desktop: FC<DesktopProps> = ({ className, title }) => {
   return (
     <ClickAwayListener onClickAway={turnOffAll}>
       <div className={cx(classes.root, className)}>
-        <AppBar
-          position="fixed"
-          style={{ height: 'fit-content' }}
-          className={cx(classes.appBar, {
-            open: isMenu,
-          })}
-        >
-          <ActionBar toggleNetwork={toggleNetwork} isNetwork={isNetwork} />
-          <TitleBar title={title} />
-        </AppBar>
         <Drawer
           variant="permanent"
           className={cx(classes.drawer, {
@@ -68,6 +58,16 @@ const Desktop: FC<DesktopProps> = ({ className, title }) => {
           )}
           <MenuItems />
         </Drawer>
+        <AppBar
+          position="fixed"
+          style={{ height: 'fit-content' }}
+          className={cx(classes.appBar, {
+            open: isMenu,
+          })}
+        >
+          <ActionBar toggleNetwork={toggleNetwork} isNetwork={isNetwork} />
+          <TitleBar title={title} />
+        </AppBar>
       </div>
     </ClickAwayListener>
   );
