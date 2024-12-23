@@ -1,4 +1,4 @@
 {
   "message_contents.MsgEthereumTx": "EVM call to {{to}} with value {{value}}",
-  "message_contents.MsgSoftwareUpgrade": "Chain upgrade of version {{version}}, scheduled for block {{height}} with info"
+  "message_contents.MsgSoftwareUpgrade": "Chain upgrade of version {{version}}, scheduled for block {{height}} with binaries"
 }
