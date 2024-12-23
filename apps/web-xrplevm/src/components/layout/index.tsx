@@ -33,12 +33,10 @@ const Layout = (props: LayoutProps) => {
       <div className={classes.contentWrapper}>
         <Nav title={navTitle} />
         <div className={classes.children}>
+          <div className={classes.backgroundLeft} />
           <div className={classes.appBarPlaceholder} />
           {!!bannerLinks.length && <Banner />}
-          <div className={cx(className, 'main-content')}>
-            <div className={classes.backgroundLeft} />
-            {children}
-          </div>
+          <div className={cx(className, 'main-content')}>{children}</div>
           <Footer className={classes.footer} />
         </div>
       </div>

@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
     top: 0,
     [theme.breakpoints.down('lg')]: {
       left: 0,
-      top: '212px',
+      top: '145px',
     },
   },
   backgroundRight: {
