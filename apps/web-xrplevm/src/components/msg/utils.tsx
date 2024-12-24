@@ -371,7 +371,7 @@ const customTypeToModel = {
   '/packages.blockchain.poa.MsgRemoveValidator': {
     model: MODELS.MsgRemoveValidator,
     content: COMPONENTS.MsgRemoveValidator,
-    tagTheme: 'six',
+    tagTheme: 'five',
     tagDisplay: 'MsgRemoveValidator',
   },
 };
