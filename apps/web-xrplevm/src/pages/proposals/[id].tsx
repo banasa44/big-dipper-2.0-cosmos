@@ -6,6 +6,11 @@ import nextI18NextConfig from '../../../next-i18next.config';
 const TokenDetailsPage: NextPage = () => <ProposalDetails />;
 
 export const getStaticPaths = () => ({ paths: [], fallback: 'blocking' });
-export const getStaticProps = withGetStaticProps(nextI18NextConfig, 'proposals');
+export const getStaticProps = withGetStaticProps(
+  nextI18NextConfig,
+  'proposals',
+  'transactions',
+  'message_contents'
+);
 
 export default TokenDetailsPage;

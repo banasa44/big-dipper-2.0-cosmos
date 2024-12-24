@@ -362,6 +362,12 @@ const customTypeToModel = {
     tagTheme: 'six',
     tagDisplay: 'MsgEthereumTx',
   },
+  '/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade': {
+    model: MODELS.MsgSoftwareUpgrade,
+    content: COMPONENTS.MsgSoftwareUpgrade,
+    tagTheme: 'six',
+    tagDisplay: 'MsgSoftwareUpgrade',
+  },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 

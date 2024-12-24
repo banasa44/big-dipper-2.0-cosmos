@@ -1,3 +1,4 @@
 {
-  "message_contents.MsgEthereumTx": "调用 EVM 到 {{to}}，数值为 {{value}}"
+  "message_contents.MsgEthereumTx": "调用 EVM 到 {{to}}，数值为 {{value}}",
+  "message_contents.MsgSoftwareUpgrade": "链升级到版本 {{version}}，计划在区块 {{height}}, 附带二进制文件"
 }

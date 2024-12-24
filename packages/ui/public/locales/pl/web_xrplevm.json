@@ -1,3 +1,4 @@
 {
-  "message_contents.MsgEthereumTx": "Wywołanie EVM do {{to}} z wartością {{value}}"
+  "message_contents.MsgEthereumTx": "Wywołanie EVM do {{to}} z wartością {{value}}",
+  "message_contents.MsgSoftwareUpgrade": "Aktualizacja sieci do wersji {{version}}, zaplanowana na blok {{height}} z plikami binarnymi"
 }
