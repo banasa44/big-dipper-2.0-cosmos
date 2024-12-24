@@ -13,10 +13,9 @@ const useStyles = makeStyles()((theme) => {
     },
     logo: {
       width: '11.875rem',
-      padding: theme.spacing(2, 1.75, 2.5),
-      '&:hover': {
-        cursor: 'pointer',
-      },
+      boxSizing: 'content-box',
+      padding: theme.spacing(2, 1.75, 2),
+      cursor: 'pointer',
     },
     appBar: {
       '&&': {
@@ -24,7 +23,7 @@ const useStyles = makeStyles()((theme) => {
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'flex-start',
-        background: theme?.palette?.background?.default,
+        background: 'transparent',
         color: theme?.palette?.custom?.fonts?.fontTwo ?? 'inherit',
         width: `calc(100% - ${CLOSED_DRAWER_WIDTH}px)`,
         zIndex: theme.zIndex.drawer + 1,

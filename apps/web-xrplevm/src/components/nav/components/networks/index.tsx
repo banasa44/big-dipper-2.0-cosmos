@@ -24,27 +24,28 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
 
   const networks: Network[] = [
     {
-      logo: 'https://livenet.xrpl.org/apple-touch-icon.png',
-      name: 'XRPL Explorer',
-      mainnet: [],
-      testnet: [],
-      retired: [
-        {
-          chainId: 'xrpl-devnet',
-          url: 'https://explorer.xrplevm.org/',
-          name: 'Devnet',
-        },
-      ],
-      other: [
+      logo: '/xrplevm/images/xrpl-evm-logo.png',
+      name: 'XRPL',
+      mainnet: [
         {
           chainId: 'xrpl-mainnet',
           url: 'https://livenet.xrpl.org/',
           name: 'Mainnet',
         },
+      ],
+      testnet: [
         {
           chainId: 'xrpl-testnet',
           url: 'https://testnet.xrpl.org/',
           name: 'Testnet',
+        },
+      ],
+      retired: [],
+      other: [
+        {
+          chainId: 'xrpl-devnet',
+          url: 'https://explorer.xrplevm.org/',
+          name: 'Devnet',
         },
       ],
     },
@@ -53,7 +54,14 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
     <div className={className}>
       {networks.map((x) => (
         <div className={classes.networkList} key={x.name}>
-          <Image width={0} height={0} className={classes.img} src={x.logo} alt="logo" unoptimized />
+          <Image
+            width={6}
+            height={26}
+            className={classes.img}
+            src={x.logo}
+            alt="logo"
+            unoptimized
+          />
           <div className="network">
             <Typography variant="h4">{x.name}</Typography>
             {x.mainnet.map((network) => (

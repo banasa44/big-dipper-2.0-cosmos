@@ -3,7 +3,7 @@ import { makeStyles } from 'tss-react/mui';
 const useStyles = makeStyles()((theme) => ({
   root: {
     width: '100%',
-    background: theme.palette.background.default,
+    background: 'transparent',
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',

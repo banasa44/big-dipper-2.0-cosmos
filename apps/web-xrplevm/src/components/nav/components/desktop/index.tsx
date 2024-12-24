@@ -3,8 +3,8 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Drawer from '@mui/material/Drawer';
 import { FC } from 'react';
 import { useRecoilValue } from 'recoil';
-import BigDipperLogoRed from 'shared-utils/assets/big-dipper-red.svg';
-import BigDipperLogoWhite from 'shared-utils/assets/big-dipper-white.svg';
+import XrplLogoBlack from 'shared-utils/assets/xrpl-evm-black.svg';
+import XrplLogoWhite from 'shared-utils/assets/xrpl-evm-white.svg';
 import { readTheme } from '@/recoil/settings';
 import TitleBar from '@/components/nav/components/title_bar';
 import MenuItems from '@/components/nav/components/menu_items';
@@ -24,16 +24,6 @@ const Desktop: FC<DesktopProps> = ({ className, title }) => {
   return (
     <ClickAwayListener onClickAway={turnOffAll}>
       <div className={cx(classes.root, className)}>
-        <AppBar
-          position="fixed"
-          style={{ height: 'fit-content' }}
-          className={cx(classes.appBar, {
-            open: isMenu,
-          })}
-        >
-          <ActionBar toggleNetwork={toggleNetwork} isNetwork={isNetwork} />
-          <TitleBar title={title} />
-        </AppBar>
         <Drawer
           variant="permanent"
           className={cx(classes.drawer, {
@@ -52,14 +42,14 @@ const Desktop: FC<DesktopProps> = ({ className, title }) => {
           }}
         >
           {theme === 'light' ? (
-            <BigDipperLogoRed
+            <XrplLogoBlack
               className={classes.logo}
               onClick={toggleMenu}
               role="button"
               aria-label="toggle menu"
             />
           ) : (
-            <BigDipperLogoWhite
+            <XrplLogoWhite
               className={classes.logo}
               onClick={toggleMenu}
               role="button"
@@ -68,6 +58,16 @@ const Desktop: FC<DesktopProps> = ({ className, title }) => {
           )}
           <MenuItems />
         </Drawer>
+        <AppBar
+          position="fixed"
+          style={{ height: 'fit-content' }}
+          className={cx(classes.appBar, {
+            open: isMenu,
+          })}
+        >
+          <ActionBar toggleNetwork={toggleNetwork} isNetwork={isNetwork} />
+          <TitleBar title={title} />
+        </AppBar>
       </div>
     </ClickAwayListener>
   );
