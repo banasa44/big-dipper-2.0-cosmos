@@ -368,6 +368,12 @@ const customTypeToModel = {
     tagTheme: 'six',
     tagDisplay: 'MsgSoftwareUpgrade',
   },
+  '/packages.blockchain.poa.MsgRemoveValidator': {
+    model: MODELS.MsgRemoveValidator,
+    content: COMPONENTS.MsgRemoveValidator,
+    tagTheme: 'five',
+    tagDisplay: 'MsgRemoveValidator',
+  },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 
