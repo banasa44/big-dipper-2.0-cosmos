@@ -1,5 +1,6 @@
 {
   "message_contents.MsgEthereumTx": "EVM call to {{to}} with value {{value}}",
   "message_contents.MsgSoftwareUpgrade": "Chain upgrade of version {{version}}, scheduled for block {{height}} with binaries",
-  "message_contents.MsgRemoveValidator": "Remove {{address}} validator"
+  "message_contents.MsgRemoveValidator": "Remove {{address}} validator",
+  "message_contents.MsgUpdateParams": "EVM update chain parameters"
 }
