@@ -1,5 +1,6 @@
 {
   "message_contents.MsgEthereumTx": "調用 EVM 到 {{to}}，數值為 {{value}}",
   "message_contents.MsgSoftwareUpgrade": "鏈升級到版本 {{version}}，計劃在區塊 {{height}}，附帶二進制文件",
-  "message_contents.MsgRemoveValidator": "移除 {{address}} 驗證人"
+  "message_contents.MsgRemoveValidator": "移除 {{address}} 驗證人",
+  "message_contents.MsgUpdateParams": "EVM 更新鏈參數"
 }

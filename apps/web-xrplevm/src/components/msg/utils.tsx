@@ -374,6 +374,12 @@ const customTypeToModel = {
     tagTheme: 'five',
     tagDisplay: 'MsgRemoveValidator',
   },
+  '/ethermint.evm.v1.MsgUpdateParams': {
+    model: MODELS.MsgUpdateParams,
+    content: COMPONENTS.MsgUpdateParams,
+    tagTheme: 'one',
+    tagDisplay: 'MsgUpdateParams',
+  },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 
