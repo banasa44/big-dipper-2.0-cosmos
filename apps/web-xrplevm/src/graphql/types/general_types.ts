@@ -12378,7 +12378,7 @@ export type TokenPriceHistoryQuery = { tokenPrice: Array<{ __typename?: 'token_p
 export type TokenomicsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TokenomicsQuery = { stakingParams: Array<{ __typename?: 'staking_params', params: any }>, stakingPool: Array<{ __typename?: 'staking_pool', bonded: any, unbonded: any }>, supply: Array<{ __typename?: 'supply', coins: any }> };
+export type TokenomicsQuery = { stakingParams: Array<{ __typename?: 'staking_params', params: any }>, stakingPool: Array<{ __typename?: 'staking_pool', bonded: any, unbonding: any, unbonded: any }>, supply: Array<{ __typename?: 'supply', coins: any }> };
 
 export type TransactionDetailsQueryVariables = Exact<{
   hash?: InputMaybe<Scalars['String']>;
