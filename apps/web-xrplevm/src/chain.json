@@ -255,8 +255,8 @@
         }
       },
       "endpoints": {
-        "graphql": "http://localhost:8080/v1/graphql",
-        "graphqlWebsocket": "ws://localhost:8080/v1/graphql",
+        "graphql": "https://cosmos-explorer-evm-sidechain.peersyst.tech/v1/graphql",
+        "graphqlWebsocket": "wss://cosmos-explorer-evm-sidechain.peersyst.tech/v1/graphql",
         "publicRpcWebsocket": "wss://tm-ws-evm-poa-sidechain.peersyst.tech/websocket"
       },
       "marketing": {
