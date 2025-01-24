@@ -2,5 +2,6 @@
   "message_contents.MsgEthereumTx": "Wywołanie EVM do {{to}} z wartością {{value}}",
   "message_contents.MsgSoftwareUpgrade": "Aktualizacja sieci do wersji {{version}}, zaplanowana na blok {{height}} z plikami binarnymi",
   "message_contents.MsgRemoveValidator": "Usuń <0>{{address}}</0> walidator",
-  "message_contents.MsgUpdateParams": "Aktualizuj parametry sieci EVM"
+  "message_contents.MsgUpdateParams": "Aktualizuj parametry sieci EVM",
+  "message_contents.MsgAddValidator": "Dodaj walidator {{moniker}} z adresem {{address}} i kluczem publicznym <0>{{pubkey}}</0>"
 }
