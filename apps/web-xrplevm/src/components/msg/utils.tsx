@@ -386,6 +386,12 @@ const customTypeToModel = {
     tagTheme: 'one',
     tagDisplay: 'MsgUpdateParams',
   },
+  '/poa.MsgAddValidator': {
+    model: MODELS.MsgAddValidator,
+    content: COMPONENTS.MsgAddValidator,
+    tagTheme: 'one',
+    tagDisplay: 'MsgAddValidator',
+  },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 

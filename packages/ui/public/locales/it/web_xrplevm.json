@@ -2,5 +2,6 @@
   "message_contents.MsgEthereumTx": "Chiamata EVM a {{to}} con valore {{value}}",
   "message_contents.MsgSoftwareUpgrade": "Aggiornamento della chain alla versione {{version}}, programmato per il blocco {{height}} con binari",
   "message_contents.MsgRemoveValidator": "Rimuovi il validatore <0>{{address}}</0>",
-  "message_contents.MsgUpdateParams": "Aggiorna i parametri della chain EVM"
+  "message_contents.MsgUpdateParams": "Aggiorna i parametri della chain EVM",
+  "message_contents.MsgAddValidator": "Aggiungi validatore {{moniker}} con indirizzo {{address}} e chiave pubblica <0>{{pubkey}}</0>"
 }
