@@ -392,6 +392,18 @@ const customTypeToModel = {
     tagTheme: 'one',
     tagDisplay: 'MsgAddValidator',
   },
+  '/cosmos.gov.v1.MsgVote': {
+    model: MODELS.MsgVote,
+    content: COMPONENTS.Vote,
+    tagTheme: 'seven',
+    tagDisplay: 'txVoteLabel',
+  },
+  '/cosmos.gov.v1.MsgSubmitProposal': {
+    model: MODELS.MsgSubmitProposal,
+    content: COMPONENTS.SubmitProposal,
+    tagTheme: 'seven',
+    tagDisplay: 'txSubmitProposalLabel',
+  },
 };
 type CustomTypeToModel = typeof customTypeToModel;
 
