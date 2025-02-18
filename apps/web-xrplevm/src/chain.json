@@ -291,7 +291,7 @@
       "endpoints": {
         "graphql": "https://governance.testnet.xrplevm.org/v1/graphql",
         "graphqlWebsocket": "wss://governance.testnet.xrplevm.org/v1/graphql",
-        "publicRpcWebsocket": "wss://cosmos.testnet.xrplevm.org/websocket"
+        "publicRpcWebsocket": "wss://rpc-xrpdev.kintsugi-nodes.com/websocket"
       },
       "marketing": {
         "matomoURL": "https://analytics.bigdipper.live",
