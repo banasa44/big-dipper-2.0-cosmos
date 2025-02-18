@@ -282,12 +282,16 @@
         "axrp": {
           "display": "xrp",
           "exponent": 18
+        },
+        "poa": {
+          "display": "poa",
+          "exponent": 6
         }
       },
       "endpoints": {
         "graphql": "https://governance.testnet.xrplevm.org/v1/graphql",
         "graphqlWebsocket": "wss://governance.testnet.xrplevm.org/v1/graphql",
-        "publicRpcWebsocket": "wss://governance.testnet.xrplevm.org/websocket"
+        "publicRpcWebsocket": "ws://cosmos.testnet.xrplevm.org:26657/websocket"
       },
       "marketing": {
         "matomoURL": "https://analytics.bigdipper.live",
