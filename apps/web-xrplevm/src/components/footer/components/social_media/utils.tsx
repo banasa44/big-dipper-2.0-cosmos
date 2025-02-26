@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { DiscordIcon, GithubIcon, TelegramIcon, TwitterIcon } from '@/components/icons';
+import { DiscordIcon, GithubIcon, XIcon } from '@/components/icons';
 
 export const socialMediaLinks: {
   component: ReactNode;
@@ -7,19 +7,14 @@ export const socialMediaLinks: {
   url: string;
 }[] = [
   {
-    component: <TelegramIcon />,
-    className: 'telegram',
-    url: 'https://t.me/forbole',
-  },
-  {
-    component: <TwitterIcon />,
-    className: 'twitter',
+    component: <XIcon />,
+    className: 'x',
     url: 'https://x.com/Peersyst ',
   },
   {
     component: <GithubIcon />,
     className: 'github',
-    url: 'https://github.com/forbole',
+    url: 'https://github.com/xrplevm',
   },
   {
     component: <DiscordIcon />,

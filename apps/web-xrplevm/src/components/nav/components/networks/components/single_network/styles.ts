@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     color: 'white',
     borderRadius: theme.shape.borderRadius,
     background: theme.palette.custom.general.icon,
-    '&.retired': {
+    '&.devnet': {
       background: theme.palette.custom.primaryData.four,
       pointerEvents: 'none',
       cursor: 'default',
@@ -32,10 +32,7 @@ const useStyles = makeStyles()((theme) => ({
       background: theme.palette.custom.primaryData.one,
     },
     '&.mainnet': {
-      background: theme.palette.primary.main,
-    },
-    '&.other': {
-      opacity: 1,
+      background: theme.palette.grey[500],
     },
   },
 }));

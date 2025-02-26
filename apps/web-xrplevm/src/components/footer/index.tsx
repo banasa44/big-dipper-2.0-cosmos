@@ -1,7 +1,5 @@
 import SocialMedia from '@/components/footer/components/social_media';
 import useStyles from '@/components/footer/styles';
-import { donateLink } from '@/components/footer/utils';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
 import useAppTranslation from '@/hooks/useAppTranslation';
@@ -21,7 +19,8 @@ const Footer: FC<{ className?: string }> = ({ className }) => {
           <div>
             <PeersystIcon />
             <p className="xrp_text">
-              Building the XRPL EVM and bridge solution for XRP with Ripple
+              The XRP Ledger Ethereum Virtual Machine (EVM) sidechain is a fast and secure
+              blockchain that brings web3 applications to the XRP Ledger community.
             </p>
           </div>
           <div />
@@ -31,14 +30,6 @@ const Footer: FC<{ className?: string }> = ({ className }) => {
           <div className="footer__social">
             <h3>{t('common:community')}</h3>
             <SocialMedia />
-            <div>
-              <p className="footer__donate--excerpt" />
-              <a href={donateLink.url} target="_blank" rel="noreferrer">
-                <Button className="footer__donate-button" variant="contained" color="primary">
-                  {t('common:donate')}
-                </Button>
-              </a>
-            </div>
           </div>
           <div className="unColor" />
         </div>

@@ -18,8 +18,7 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
     name: string;
     mainnet: NetworkUrl[];
     testnet: NetworkUrl[];
-    retired: NetworkUrl[];
-    other: NetworkUrl[];
+    devnet: NetworkUrl[];
   }
 
   const networks: Network[] = [
@@ -36,15 +35,14 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
       testnet: [
         {
           chainId: 'xrpl-testnet',
-          url: 'https://testnet.xrpl.org/',
+          url: 'https://governance.testnet.xrplevm.org/',
           name: 'Testnet',
         },
       ],
-      retired: [],
-      other: [
+      devnet: [
         {
           chainId: 'xrpl-devnet',
-          url: 'https://explorer.xrplevm.org/',
+          url: 'https://egovernance.devnet.xrplevm.org/',
           name: 'Devnet',
         },
       ],
@@ -54,14 +52,7 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
     <div className={className}>
       {networks.map((x) => (
         <div className={classes.networkList} key={x.name}>
-          <Image
-            width={6}
-            height={26}
-            className={classes.img}
-            src={x.logo}
-            alt="logo"
-            unoptimized
-          />
+          <Image width={6} height={26} src={x.logo} alt="logo" unoptimized />
           <div className="network">
             <Typography variant="h4">{x.name}</Typography>
             {x.mainnet.map((network) => (
@@ -71,6 +62,7 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
                 url={network.url}
                 name={network.name}
                 chainId={network.chainId}
+                disabled
               />
             ))}
             {x.testnet.map((network) => (
@@ -82,23 +74,13 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
                 chainId={network.chainId}
               />
             ))}
-            {x.retired.map((network) => (
+            {x.devnet.map((network) => (
               <SingleNetwork
-                className="retired"
+                className="devnet"
                 key={network.chainId}
                 url={network.url}
                 name={network.name}
                 chainId={network.chainId}
-              />
-            ))}
-            {x.other.map((network) => (
-              <SingleNetwork
-                className="other"
-                key={network.chainId}
-                url={network.url}
-                name={network.name}
-                chainId={network.chainId}
-                disabled
               />
             ))}
           </div>
