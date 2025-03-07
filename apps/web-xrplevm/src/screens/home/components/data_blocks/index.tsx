@@ -38,7 +38,7 @@ const DataBlocks: FC<ComponentDefault> = ({ className }) => {
     },
     {
       key: t('price'),
-      value: price !== 0 ? `$${numeral(price).format('0.000')}` : 'N/A',
+      value: price !== 0 ? `$${numeral(price).format('0.00')}` : 'N/A',
       description: t('dataFrom'),
       Icon: <CoinGeckoIcon />,
       className: classes.price,
