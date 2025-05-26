@@ -1,11 +1,12 @@
 import numeral from 'numeral';
 import * as R from 'ramda';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import chainConfig from '@/chainConfig';
 import { ParamsQuery, useParamsQuery } from '@/graphql/types/general_types';
 import { DistributionParams, GovParams, SlashingParams, StakingParams } from '@/models';
 import type { ParamsState } from '@/screens/params/types';
 import { formatToken } from '@/utils/format_token';
+import { fetchParseIbcDenom } from 'ui/src/utils/parse_ibc';
 
 const { primaryTokenUnit } = chainConfig();
 
@@ -137,6 +138,42 @@ export const useParams = () => {
       handleSetState((prevState) => ({ ...prevState, loading: false }));
     },
   });
+
+  useEffect(() => {
+    const parseDenoms = async () => {
+      const current = state.gov?.minDeposit;
+      if (!current) return;
+
+      const parsedBase = /^ibc\//i.test(current.baseDenom)
+        ? await fetchParseIbcDenom(current.baseDenom)
+        : current.baseDenom;
+
+      const parsedDisplay = /^ibc\//i.test(current.displayDenom)
+        ? await fetchParseIbcDenom(current.displayDenom)
+        : current.displayDenom;
+
+      if (parsedBase !== current.baseDenom || parsedDisplay !== current.displayDenom) {
+        handleSetState((prevState) => {
+          const prevGov = prevState.gov;
+          if (!prevGov) return prevState;
+
+          return {
+            ...prevState,
+            gov: {
+              ...prevGov,
+              minDeposit: {
+                ...prevGov.minDeposit,
+                baseDenom: parsedBase ?? current.baseDenom,
+                displayDenom: parsedDisplay ?? current.displayDenom,
+              },
+            },
+          };
+        });
+      }
+    };
+
+    parseDenoms();
+  }, [state.gov?.minDeposit?.baseDenom, state.gov?.minDeposit?.displayDenom, handleSetState]);
 
   return {
     state,

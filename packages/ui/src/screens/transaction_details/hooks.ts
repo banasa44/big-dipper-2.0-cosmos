@@ -5,6 +5,7 @@ import { convertMsgsToModels } from '@/components/msg/utils';
 import { TransactionDetailsQuery, useTransactionDetailsQuery } from '@/graphql/types/general_types';
 import type { TransactionState } from '@/screens/transaction_details/types';
 import { formatToken } from '@/utils/format_token';
+import { fetchParseIbcDenom } from '@/utils/parse_ibc';
 
 // =============================
 // overview
@@ -25,7 +26,7 @@ const formatOverview = (data: TransactionDetailsQuery) => {
     gasWanted: data.transaction[0].gasWanted,
     success,
     memo: data.transaction[0].memo ?? '',
-    error: success ? '' : data.transaction[0].rawLog ?? '',
+    error: success ? '' : (data.transaction[0].rawLog ?? ''),
   };
   return overview;
 };
@@ -166,6 +167,37 @@ export const useTransactionDetails = () => {
       }),
     [state.messages.filterBy]
   );
+
+  useEffect(() => {
+    const parseFeeDenoms = async () => {
+      const fee = state.overview.fee;
+      if (!fee) return;
+
+      const parsedBase = /^ibc\//i.test(fee.baseDenom)
+        ? await fetchParseIbcDenom(fee.baseDenom)
+        : fee.baseDenom;
+
+      const parsedDisplay = /^ibc\//i.test(fee.displayDenom)
+        ? await fetchParseIbcDenom(fee.displayDenom)
+        : fee.displayDenom;
+
+      if (parsedBase !== fee.baseDenom || parsedDisplay !== fee.displayDenom) {
+        handleSetState((prev) => ({
+          ...prev,
+          overview: {
+            ...prev.overview,
+            fee: {
+              ...prev.overview.fee,
+              baseDenom: parsedBase ?? fee.baseDenom,
+              displayDenom: parsedDisplay ?? fee.displayDenom,
+            },
+          },
+        }));
+      }
+    };
+
+    parseFeeDenoms();
+  }, [state.overview.fee.baseDenom, state.overview.fee.displayDenom, handleSetState]);
 
   return {
     state,

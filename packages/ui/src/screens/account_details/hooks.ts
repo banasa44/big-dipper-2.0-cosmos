@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import chainConfig from '@/chainConfig';
 import { useDesmosProfile } from '@/hooks/use_desmos_profile';
 import type {
@@ -22,6 +22,7 @@ import {
 } from '@/screens/account_details/utils';
 import { formatToken } from '@/utils/format_token';
 import { getDenom } from '@/utils/get_denom';
+import { fetchParseIbcDenom } from '@/utils/parse_ibc';
 
 const { extra, primaryTokenUnit, tokenUnits } = chainConfig();
 
@@ -235,7 +236,7 @@ export const useAccountProfileDetails = () => {
 
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   // ==========================
   // Desmos Profile
@@ -272,7 +273,7 @@ export const useAccountBalance = () => {
   );
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   const commission = useCommission(address);
   const available = useAvailableBalances(address);
@@ -281,28 +282,63 @@ export const useAccountBalance = () => {
   const rewards = useRewards(address);
 
   useEffect(() => {
-    const formattedRawData: {
-      commission?: (typeof commission)['commission'];
-      accountBalances?: (typeof available)['accountBalances'];
-      delegationBalance?: (typeof delegation)['delegationBalance'];
-      unbondingBalance?: (typeof unbonding)['unbondingBalance'];
-      delegationRewards?: (typeof rewards)['delegationRewards'];
-    } = {};
-    formattedRawData.commission = R.pathOr({ coins: [] }, ['commission'], commission);
-    formattedRawData.accountBalances = R.pathOr({ coins: [] }, ['accountBalances'], available);
-    formattedRawData.delegationBalance = R.pathOr({ coins: [] }, ['delegationBalance'], delegation);
-    formattedRawData.unbondingBalance = R.pathOr({ coins: [] }, ['unbondingBalance'], unbonding);
-    formattedRawData.delegationRewards = R.pathOr([], ['delegationRewards'], rewards);
+    async function updateAll() {
+      if (
+        commission.commission === undefined &&
+        available.accountBalances === undefined &&
+        delegation.delegationBalance === undefined &&
+        unbonding.unbondingBalance === undefined &&
+        rewards.delegationRewards === undefined
+      ) {
+        return;
+      }
+      const raw = {
+        commission: R.pathOr({ coins: [] }, ['commission'], commission),
+        accountBalances: R.pathOr({ coins: [] }, ['accountBalances'], available),
+        delegationBalance: R.pathOr({ coins: [] }, ['delegationBalance'], delegation),
+        unbondingBalance: R.pathOr({ coins: [] }, ['unbondingBalance'], unbonding),
+        delegationRewards: R.pathOr([], ['delegationRewards'], rewards),
+      };
 
-    const formatAccountBalance = formatAllBalance(formattedRawData);
+      const formatted = formatAllBalance(raw);
 
-    if (Object.keys(formatAccountBalance).length > 0) {
-      handleSetState((prevState) => ({
-        ...prevState,
-        ...formatAccountBalance,
+      handleSetState((prev) => ({
+        ...prev,
+        ...formatted,
         loading: false,
       }));
+
+      const toks = formatted.otherTokens!.data;
+      const toParse = toks.filter((t) => /^ibc\//i.test(t.denom));
+      if (toParse.length) {
+        const pairs = await Promise.all(
+          toParse.map(
+            async (t) => [t.denom, (await fetchParseIbcDenom(t.denom)) || t.denom] as const
+          )
+        );
+        const mapObj = Object.fromEntries(pairs);
+
+        const newTokens = toks.map((t) => ({
+          ...t,
+          denom: mapObj[t.denom] || t.denom,
+        }));
+
+        handleSetState((prev) => {
+          if (prev.otherTokens.data.every((t, i) => t.denom === newTokens[i]?.denom)) {
+            return prev;
+          }
+          return {
+            ...prev,
+            otherTokens: {
+              data: newTokens,
+              count: newTokens.length,
+            },
+          };
+        });
+      }
     }
+
+    updateAll();
   }, [commission, available, delegation, unbonding, rewards, handleSetState]);
 
   return { state };
@@ -323,7 +359,7 @@ export const useAccountWithdrawalAddr = () => {
   );
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   // ==========================
   // Fetch Data
@@ -358,7 +394,7 @@ export const useAccountRewards = () => {
   );
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   const rewards = useRewards(address);
 

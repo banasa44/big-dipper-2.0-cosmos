@@ -8,6 +8,7 @@ import {
 } from '@/graphql/types/general_types';
 import type { DepositState } from '@/screens/proposal_details/components/deposits/types';
 import { formatToken } from '@/utils/format_token';
+import { fetchParseIbcDenom } from '@/utils/parse_ibc';
 
 const { primaryTokenUnit } = chainConfig();
 
@@ -28,21 +29,44 @@ export const useDeposits = () => {
     variables: {
       proposalId: parseFloat((router?.query?.id as string) ?? '0'),
     },
-    onCompleted: (data) => {
-      handleSetState((prevState) => ({ ...prevState, ...foramtProposalDeposits(data) }));
+    onCompleted: async (data) => {
+      const formatted = await parseProposalDeposits(data);
+      handleSetState((prevState) => ({
+        ...prevState,
+        ...formatted,
+      }));
     },
   });
 
-  const foramtProposalDeposits = (data: ProposalDetailsDepositsQuery) => {
-    const format = data.proposalDeposit.map((x) => ({
-      amount: formatToken(x?.amount?.[0]?.amount ?? '0', x?.amount?.[0]?.denom ?? primaryTokenUnit),
-      user: x?.depositorAddress ?? '',
-      timestamp: x?.block?.timestamp ?? '',
-    }));
+  const parseProposalDeposits = async (
+    data: ProposalDetailsDepositsQuery
+  ): Promise<DepositState> => {
+    const format = await Promise.all(
+      data.proposalDeposit.map(async (x) => {
+        const rawAmount = x?.amount?.[0];
+        const amount = formatToken(rawAmount?.amount ?? '0', rawAmount?.denom ?? primaryTokenUnit);
 
-    return {
-      data: format,
-    };
+        const parsedBase = /^ibc\//i.test(amount.baseDenom)
+          ? await fetchParseIbcDenom(amount.baseDenom)
+          : amount.baseDenom;
+
+        const parsedDisplay = /^ibc\//i.test(amount.displayDenom)
+          ? await fetchParseIbcDenom(amount.displayDenom)
+          : amount.displayDenom;
+
+        return {
+          amount: {
+            ...amount,
+            baseDenom: parsedBase ?? amount.baseDenom,
+            displayDenom: parsedDisplay ?? amount.displayDenom,
+          },
+          user: x?.depositorAddress ?? '',
+          timestamp: x?.block?.timestamp ?? '',
+        };
+      })
+    );
+
+    return { data: format };
   };
 
   return {

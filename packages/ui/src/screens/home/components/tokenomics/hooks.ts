@@ -1,8 +1,9 @@
 import numeral from 'numeral';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TokenomicsQuery, useTokenomicsQuery } from '@/graphql/types/general_types';
 import { StakingParams } from '@/models';
 import { formatToken } from '@/utils/format_token';
+import { useFetchParseIbcDenom } from '@/hooks/use_parse_ibc_denom';
 
 type TokenomicsState = {
   bonded: number;
@@ -44,11 +45,24 @@ export const useTokenomics = () => {
     denom: '',
   });
 
+  const parsedDenom = useFetchParseIbcDenom(state.denom);
+
   useTokenomicsQuery({
     onCompleted: (data) => {
-      setState(formatTokenomics(data, state));
+      const formatted = formatTokenomics(data, state);
+      setState(formatted);
     },
   });
+
+  // Quan el denom parsejat canvia, actualitza l'estat si és diferent
+  useEffect(() => {
+    if (!parsedDenom || parsedDenom === state.denom) return;
+
+    setState((prev) => ({
+      ...prev,
+      denom: parsedDenom,
+    }));
+  }, [parsedDenom]);
 
   return {
     state,
