@@ -16,6 +16,7 @@ let ibcQueryClient: (QueryClient & IbcExtension) | null = null;
 async function getIbcQueryClient(): Promise<QueryClient & IbcExtension> {
   if (!ibcQueryClient) {
     const tmClient = (await Tendermint34Client.connect(getCurrentRpcEndpoint())) as any;
+
     ibcQueryClient = QueryClient.withExtensions(tmClient, setupIbcExtension);
   }
   return ibcQueryClient;
@@ -27,6 +28,10 @@ async function getIbcQueryClient(): Promise<QueryClient & IbcExtension> {
  * @returns  baseDenom (on-chain unit),
  */
 export async function parseIbcDenom(ibcDenom: string): Promise<string | undefined> {
+  if (!/^ibc\//i.test(ibcDenom)) {
+    return undefined;
+  }
+
   const hash = ibcDenom.replace(/^ibc\//i, '');
   const ibcClient = await getIbcQueryClient();
 
@@ -37,4 +42,19 @@ export async function parseIbcDenom(ibcDenom: string): Promise<string | undefine
     return trace.baseDenom;
   }
   return undefined;
+}
+
+export async function fetchParseIbcDenom(ibcDenom: string): Promise<string> {
+  if (!/^ibc\//i.test(ibcDenom)) return ibcDenom;
+
+  const hash = ibcDenom.replace(/^ibc\//i, '');
+  const response = await fetch(`/xrplevm/api/parseDenom?hash=${hash}`);
+  const data = await response.json();
+
+  if (response.ok && data.baseDenom) {
+    return data.baseDenom;
+  }
+
+  console.error('Error fetching denom:', data.error);
+  return ibcDenom;
 }
