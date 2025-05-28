@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const baseDenom = await parseIbcDenom(hash); // use lowercase for consistency
+    const baseDenom = await parseIbcDenom(hash);
     res.status(200).json({ baseDenom });
   } catch (error: any) {
     console.error('Error in /api/parse_denom:', error);

@@ -1,31 +1,49 @@
 /**
  * @jest-environment node
  */
-import { parseIbcDenom } from './index';
+import { extractIbcHash, fetchParseIbcDenom } from './index';
 
-jest.mock('@/chainConfig', () => ({
-  __esModule: true,
-  default: () => ({
-    endpoints: {
-      cosmosRpc: 'http://cosmos.testnet.xrplevm.org:26657',
-    },
-  }),
-}));
+global.fetch = jest.fn();
 
-describe('utils: parseIbcDenom (integration)', () => {
-  it('should return path and baseDenom for a valid IBC denom', async () => {
-    // Replace with a real, valid IBC denom hash for your chain
-    const ibcDenom = 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518';
-    const result = await parseIbcDenom(ibcDenom);
-    console.log('📦 parseIbcDenom result:', JSON.stringify(result, null, 2));
-
-    expect(result).toHaveProperty('path');
-    expect(result).toHaveProperty('baseDenom');
-    expect(typeof result).toBe('string');
-    expect(result?.length).toBeGreaterThan(0);
+describe('fetchParseIbcDenom', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (global.fetch as jest.Mock).mockClear();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('returns original denom for non-IBC denominations', async () => {
+    const result = await fetchParseIbcDenom('uatom');
+    expect(result).toBe('uatom');
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('fetches base denomination for IBC denominations', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ baseDenom: 'uosmo' }),
+    });
+
+    const ibcDenom = 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518';
+    const result = await fetchParseIbcDenom(ibcDenom);
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      `/xrplevm/api/parse_denom?hash=${extractIbcHash(ibcDenom)}`
+    );
+    expect(result).toBe('uosmo');
+  });
+
+  it('returns original denom when API returns an error', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ error: 'Failed to parse' }),
+    });
+
+    const ibcDenom = 'ibc/INVALID_HASH';
+    const result = await fetchParseIbcDenom(ibcDenom);
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      `/xrplevm/api/parse_denom?hash=${extractIbcHash(ibcDenom)}`
+    );
+    expect(result).toBe(ibcDenom);
   });
 });

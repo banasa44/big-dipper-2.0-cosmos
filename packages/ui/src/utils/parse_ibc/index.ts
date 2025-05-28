@@ -3,6 +3,10 @@ import { Tendermint34Client } from '@cosmjs/tendermint-rpc';
 import type { IbcExtension } from '@cosmjs/stargate';
 import { QueryClient, setupIbcExtension } from '@cosmjs/stargate';
 
+/**
+ * Gets the current RPC endpoint for Cosmos from chain configuration
+ * @returns The URL of the Cosmos RPC endpoint
+ */
 export function getCurrentRpcEndpoint() {
   const { endpoints } = chainConfig();
   return endpoints.cosmosRpc!;
@@ -11,7 +15,8 @@ export function getCurrentRpcEndpoint() {
 let ibcQueryClient: (QueryClient & IbcExtension) | null = null;
 
 /**
- * Get a QueryClient with IBC transfer extension
+ * Gets a QueryClient with IBC transfer extension
+ * @returns A query client with IBC extension
  */
 async function getIbcQueryClient(): Promise<QueryClient & IbcExtension> {
   if (!ibcQueryClient) {
@@ -32,7 +37,9 @@ export function isIbcDenom(denom: string): boolean {
 }
 
 /**
- * Extract the hash part from an IBC denomination
+ * Extracts the hash part from an IBC denomination
+ * @param denom The IBC denomination (e.g., 'ibc/HASH123')
+ * @returns The extracted hash (e.g., 'HASH123')
  */
 export function extractIbcHash(denom: string): string {
   return denom.replace(/^ibc\//i, '');
