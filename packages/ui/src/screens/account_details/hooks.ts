@@ -22,6 +22,7 @@ import {
 } from '@/screens/account_details/utils';
 import { formatToken } from '@/utils/format_token';
 import { getDenom } from '@/utils/get_denom';
+import { fetchParseIbcDenom, isIbcDenom } from '@/utils/parse_ibc';
 
 const { extra, primaryTokenUnit, tokenUnits } = chainConfig();
 
@@ -235,7 +236,7 @@ export const useAccountProfileDetails = () => {
 
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   // ==========================
   // Desmos Profile
@@ -272,7 +273,7 @@ export const useAccountBalance = () => {
   );
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   const commission = useCommission(address);
   const available = useAvailableBalances(address);
@@ -305,6 +306,53 @@ export const useAccountBalance = () => {
     }
   }, [commission, available, delegation, unbonding, rewards, handleSetState]);
 
+  useEffect(() => {
+    async function parseIbcTokens() {
+      if (state.otherTokens.data.length) {
+        const toParse = state.otherTokens.data.filter((t) => isIbcDenom(t.denom));
+        if (toParse.length) {
+          const parsedTokens = await Promise.all(
+            toParse.map(async (token) => {
+              try {
+                const parsedDenom = await fetchParseIbcDenom(token.denom);
+                return {
+                  ...token,
+                  originalDenom: token.denom,
+                  denom: parsedDenom || token.denom,
+                };
+              } catch (error) {
+                console.error(`Failed to parse IBC token ${token.denom}:`, error);
+                return token;
+              }
+            })
+          );
+
+          handleSetState((prevState) => {
+            const updatedTokens = [...prevState.otherTokens.data];
+
+            parsedTokens.forEach((parsedToken) => {
+              const index = updatedTokens.findIndex((t) => t.denom === parsedToken.originalDenom);
+              if (index >= 0) {
+                updatedTokens[index] = parsedToken;
+              }
+            });
+
+            return {
+              ...prevState,
+              otherTokens: {
+                data: updatedTokens,
+                count: updatedTokens.length,
+              },
+            };
+          });
+        }
+      }
+    }
+    if (!state.loading) {
+      parseIbcTokens();
+    }
+  }, [state.otherTokens.data, state.loading, handleSetState]);
+
   return { state };
 };
 
@@ -323,7 +371,7 @@ export const useAccountWithdrawalAddr = () => {
   );
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   // ==========================
   // Fetch Data
@@ -358,7 +406,7 @@ export const useAccountRewards = () => {
   );
   const address = Array.isArray(router.query.address)
     ? router.query.address[0]
-    : router.query.address ?? '';
+    : (router.query.address ?? '');
 
   const rewards = useRewards(address);
 
@@ -380,3 +428,4 @@ export const useAccountRewards = () => {
 
   return { state };
 };
+export { useRewards };
