@@ -23,16 +23,27 @@ async function getIbcQueryClient(): Promise<QueryClient & IbcExtension> {
 }
 
 /**
- * Query the on-chain denom trace and metadata for an IBC denom
- * @param ibcDenom e.g. "ibc/27394FB0..."
- * @returns  baseDenom (on-chain unit),
+ * Checks if a denomination is an IBC denomination
+ * @param denom The denomination to check
+ * @returns boolean indicating if the denom is an IBC denom
  */
-export async function parseIbcDenom(ibcDenom: string): Promise<string | undefined> {
-  if (!/^ibc\//i.test(ibcDenom)) {
-    return undefined;
-  }
+export function isIbcDenom(denom: string): boolean {
+  return /^ibc\//i.test(denom);
+}
 
-  const hash = ibcDenom.replace(/^ibc\//i, '');
+/**
+ * Extract the hash part from an IBC denomination
+ */
+export function extractIbcHash(denom: string): string {
+  return denom.replace(/^ibc\//i, '');
+}
+
+/**
+ * Query the on-chain denom trace and metadata for an IBC hash
+ * @param hash The hash part extracted from an IBC denomination (without the 'ibc/' prefix)
+ * @returns baseDenom (on-chain unit) if found
+ */
+export async function parseIbcDenom(hash: string): Promise<string | undefined> {
   const ibcClient = await getIbcQueryClient();
 
   const denomTraceResponse = await ibcClient.ibc.transfer.denomTrace(hash);
@@ -44,11 +55,17 @@ export async function parseIbcDenom(ibcDenom: string): Promise<string | undefine
   return undefined;
 }
 
-export async function fetchParseIbcDenom(ibcDenom: string): Promise<string> {
-  if (!/^ibc\//i.test(ibcDenom)) return ibcDenom;
+/**
+ * Fetches and parses an IBC denomination via API (client-side friendly)
+ * @param denom The denomination to parse
+ * @returns The parsed denomination if it's an IBC denom, or the original denom otherwise
+ */
+export async function fetchParseIbcDenom(denom: string): Promise<string> {
+  if (!isIbcDenom(denom)) return denom;
+  console.log('Fetching denom:');
 
-  const hash = ibcDenom.replace(/^ibc\//i, '');
-  const response = await fetch(`/xrplevm/api/parseDenom?hash=${hash}`);
+  const hash = extractIbcHash(denom);
+  const response = await fetch(`/xrplevm/api/parse_denom?hash=${hash}`);
   const data = await response.json();
 
   if (response.ok && data.baseDenom) {
@@ -56,5 +73,5 @@ export async function fetchParseIbcDenom(ibcDenom: string): Promise<string> {
   }
 
   console.error('Error fetching denom:', data.error);
-  return ibcDenom;
+  return denom;
 }

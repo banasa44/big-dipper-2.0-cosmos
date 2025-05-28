@@ -9,10 +9,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const baseDenom = await parseIbcDenom(`IBC/${hash}`);
+    const baseDenom = await parseIbcDenom(hash); // use lowercase for consistency
     res.status(200).json({ baseDenom });
   } catch (error: any) {
-    console.error('Error in /api/parseDenom:', error);
+    console.error('Error in /api/parse_denom:', error);
     res.status(500).json({ error: error.message });
   }
 }
