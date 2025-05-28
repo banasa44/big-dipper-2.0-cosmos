@@ -30,43 +30,44 @@ export const useDeposits = () => {
       proposalId: parseFloat((router?.query?.id as string) ?? '0'),
     },
     onCompleted: async (data) => {
-      const formatted = await parseProposalDeposits(data);
+      const formatted = formatProposalDeposits(data);
+      const parsedDeposits = await parseIbcDenoms(formatted.data);
+
       handleSetState((prevState) => ({
         ...prevState,
-        ...formatted,
+        data: parsedDeposits,
       }));
     },
   });
 
-  const parseProposalDeposits = async (
-    data: ProposalDetailsDepositsQuery
-  ): Promise<DepositState> => {
-    const format = await Promise.all(
-      data.proposalDeposit.map(async (x) => {
-        const rawAmount = x?.amount?.[0];
-        const amount = formatToken(rawAmount?.amount ?? '0', rawAmount?.denom ?? primaryTokenUnit);
+  const formatProposalDeposits = (data: ProposalDetailsDepositsQuery) => {
+    const format = data.proposalDeposit.map((x) => ({
+      amount: formatToken(x?.amount?.[0]?.amount ?? '0', x?.amount?.[0]?.denom ?? primaryTokenUnit),
+      user: x?.depositorAddress ?? '',
+      timestamp: x?.block?.timestamp ?? '',
+    }));
 
-        const parsedBase = /^ibc\//i.test(amount.baseDenom)
-          ? await fetchParseIbcDenom(amount.baseDenom)
-          : amount.baseDenom;
+    return {
+      data: format,
+    };
+  };
 
-        const parsedDisplay = /^ibc\//i.test(amount.displayDenom)
-          ? await fetchParseIbcDenom(amount.displayDenom)
-          : amount.displayDenom;
+  const parseIbcDenoms = async (deposits: any[]): Promise<any[]> => {
+    return Promise.all(
+      deposits.map(async (deposit) => {
+        const parsedBase = await fetchParseIbcDenom(deposit.amount.baseDenom);
+        const parsedDisplay = await fetchParseIbcDenom(deposit.amount.displayDenom);
 
         return {
+          ...deposit,
           amount: {
-            ...amount,
-            baseDenom: parsedBase ?? amount.baseDenom,
-            displayDenom: parsedDisplay ?? amount.displayDenom,
+            ...deposit.amount,
+            baseDenom: parsedBase,
+            displayDenom: parsedDisplay,
           },
-          user: x?.depositorAddress ?? '',
-          timestamp: x?.block?.timestamp ?? '',
         };
       })
     );
-
-    return { data: format };
   };
 
   return {
