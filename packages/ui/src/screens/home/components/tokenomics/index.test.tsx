@@ -5,7 +5,9 @@ import MockTheme from '@/tests/mocks/MockTheme';
 import wait from '@/tests/utils/wait';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
+import { waitFor, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+import '@testing-library/jest-dom';
 
 // ==================================
 // mocks
@@ -17,6 +19,26 @@ jest.mock('@/components/box', () => (props: JSX.IntrinsicElements['div']) => (
 jest.mock('recharts', () => ({
   ...jest.requireActual('recharts'),
   Tooltip: () => <div id="test-tooltip" />,
+}));
+
+jest.mock('@/hooks/use_parse_ibc_denom', () => {
+  const mockFn = jest.fn((denom) => {
+    if (denom === 'ibc/HASH123') return 'uosmo';
+    return denom;
+  });
+
+  return {
+    useFetchParseIbcDenom: mockFn,
+  };
+});
+
+jest.mock('@/utils/parse_ibc', () => ({
+  isIbcDenom: jest.fn((denom) => denom.startsWith('ibc/')),
+  extractIbcHash: jest.fn((denom) => denom.replace(/^ibc\//i, '')),
+  fetchParseIbcDenom: jest.fn(async (denom) => {
+    if (denom === 'ibc/HASH123') return 'uosmo';
+    return denom;
+  }),
 }));
 
 const mockTokenomics = jest.fn().mockReturnValue({
@@ -79,6 +101,41 @@ describe('screen: Home/Tokenomics', () => {
 
     const tree = component?.toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('correctly parses IBC denoms in UI', async () => {
+    const ibcMockTokenomics = {
+      data: {
+        stakingParams: [{ params: { bond_denom: 'ibc/HASH123' } }],
+        stakingPool: [{ bonded: 254578529800, unbonded: 204887435198 }],
+        supply: [{ coins: [{ denom: 'ibc/HASH123', amount: '7987725829900' }] }],
+      },
+    };
+
+    const { container } = render(
+      <ApolloProvider client={mockClient}>
+        <MockedProvider
+          mocks={[{ request: { query: TokenomicsDocument }, result: ibcMockTokenomics }]}
+        >
+          <MockTheme>
+            <Tokenomics />
+          </MockTheme>
+        </MockedProvider>
+      </ApolloProvider>
+    );
+
+    const hookMock = require('@/hooks/use_parse_ibc_denom').useFetchParseIbcDenom;
+
+    await waitFor(() => {
+      expect(hookMock).toHaveBeenCalledWith('ibc/HASH123');
+      expect(
+        hookMock.mock.results.find(
+          (r: { type: string; value: any }) => r.type === 'return' && r.value === 'uosmo'
+        )
+      ).toBeTruthy();
+    });
+
+    expect(container.textContent).not.toMatch(/ibc\/HASH123/i);
   });
 
   afterEach(() => {

@@ -161,18 +161,16 @@ export const useParams = () => {
     },
   });
 
+  const [denomsProcessed, setDenomsProcessed] = useState(false);
   useEffect(() => {
+    if (denomsProcessed) return;
+
     const parseDenoms = async () => {
       const current = state.gov?.minDeposit;
       if (!current) return;
 
-      const parsedBase = /^ibc\//i.test(current.baseDenom)
-        ? await fetchParseIbcDenom(current.baseDenom)
-        : current.baseDenom;
-
-      const parsedDisplay = /^ibc\//i.test(current.displayDenom)
-        ? await fetchParseIbcDenom(current.displayDenom)
-        : current.displayDenom;
+      const parsedBase = await fetchParseIbcDenom(current.baseDenom);
+      const parsedDisplay = await fetchParseIbcDenom(current.displayDenom);
 
       if (parsedBase !== current.baseDenom || parsedDisplay !== current.displayDenom) {
         handleSetState((prevState) => {
@@ -185,17 +183,18 @@ export const useParams = () => {
               ...prevGov,
               minDeposit: {
                 ...prevGov.minDeposit,
-                baseDenom: parsedBase ?? current.baseDenom,
-                displayDenom: parsedDisplay ?? current.displayDenom,
+                baseDenom: parsedBase,
+                displayDenom: parsedDisplay,
               },
             },
           };
         });
       }
+      setDenomsProcessed(true);
     };
 
     parseDenoms();
-  }, [state.gov?.minDeposit?.baseDenom, state.gov?.minDeposit?.displayDenom, handleSetState]);
+  }, [denomsProcessed, handleSetState]);
 
   return {
     state,

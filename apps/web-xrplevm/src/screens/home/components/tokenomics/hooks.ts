@@ -49,12 +49,10 @@ export const useTokenomics = () => {
 
   useTokenomicsQuery({
     onCompleted: (data) => {
-      const formatted = formatTokenomics(data, state);
-      setState(formatted);
+      setState(formatTokenomics(data, state));
     },
   });
 
-  // Quan el denom parsejat canvia, actualitza l'estat si és diferent
   useEffect(() => {
     if (!parsedDenom || parsedDenom === state.denom) return;
 
