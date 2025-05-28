@@ -173,13 +173,9 @@ export const useTransactionDetails = () => {
       const fee = state.overview.fee;
       if (!fee) return;
 
-      const parsedBase = /^ibc\//i.test(fee.baseDenom)
-        ? await fetchParseIbcDenom(fee.baseDenom)
-        : fee.baseDenom;
+      const parsedBase = await fetchParseIbcDenom(fee.baseDenom);
 
-      const parsedDisplay = /^ibc\//i.test(fee.displayDenom)
-        ? await fetchParseIbcDenom(fee.displayDenom)
-        : fee.displayDenom;
+      const parsedDisplay = await fetchParseIbcDenom(fee.displayDenom);
 
       if (parsedBase !== fee.baseDenom || parsedDisplay !== fee.displayDenom) {
         handleSetState((prev) => ({
