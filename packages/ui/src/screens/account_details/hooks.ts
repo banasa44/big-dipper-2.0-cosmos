@@ -22,7 +22,7 @@ import {
 } from '@/screens/account_details/utils';
 import { formatToken } from '@/utils/format_token';
 import { getDenom } from '@/utils/get_denom';
-import { fetchParseIbcDenom, isIbcDenom } from '@/utils/parse_ibc';
+import { fetchErc20AddressForDenom, fetchParseIbcDenom, isIbcDenom } from '@/utils/parse_ibc';
 
 const { extra, primaryTokenUnit, tokenUnits } = chainConfig();
 
@@ -262,6 +262,9 @@ export const useAccountBalance = () => {
   const router = useRouter();
   const [state, setState] = useState<AccountBalanceState>(balanceInitialState);
   const [ibcParsingInProgress, setIbcParsingInProgress] = useState(false);
+  const [erc20ParsingInProgress, setErc20ParsingInProgress] = useState(false);
+  const [processedIbcTokens, setProcessedIbcTokens] = useState<Set<string>>(new Set());
+  const [processedErc20Tokens, setProcessedErc20Tokens] = useState<Set<string>>(new Set());
 
   const handleSetState = useCallback(
     (stateChange: (prevState: AccountBalanceState) => AccountBalanceState) => {
@@ -355,7 +358,56 @@ export const useAccountBalance = () => {
     }
   }, [state.otherTokens.data, state.loading, handleSetState]);
 
-  return { state, ibcParsingInProgress };
+  useEffect(() => {
+    async function fetchErc20Addresses() {
+      if (state.otherTokens.data.length) {
+        const ibcTokens = state.otherTokens.data.filter((t) => isIbcDenom(t.denom));
+        if (ibcTokens.length) {
+          setErc20ParsingInProgress(true);
+          const tokensWithErc20 = await Promise.all(
+            ibcTokens.map(async (token) => {
+              try {
+                const erc20Address = await fetchErc20AddressForDenom(token.denom);
+                return {
+                  ...token,
+                  erc20Address,
+                };
+              } catch (error) {
+                console.error(`Failed to fetch ERC20 address for ${token.denom}:`, error);
+                return token;
+              }
+            })
+          );
+
+          handleSetState((prevState) => {
+            const updatedTokens = [...prevState.otherTokens.data];
+
+            tokensWithErc20.forEach((tokenWithErc20) => {
+              const index = updatedTokens.findIndex((t) => t.denom === tokenWithErc20.denom);
+              if (index >= 0) {
+                updatedTokens[index] = tokenWithErc20;
+              }
+            });
+
+            return {
+              ...prevState,
+              otherTokens: {
+                data: updatedTokens,
+                count: updatedTokens.length,
+              },
+            };
+          });
+          setErc20ParsingInProgress(false);
+        }
+      }
+    }
+
+    if (!state.loading) {
+      fetchErc20Addresses();
+    }
+  }, [state.otherTokens.data, state.loading]);
+
+  return { state, ibcParsingInProgress, erc20ParsingInProgress };
 };
 
 export const useAccountWithdrawalAddr = () => {

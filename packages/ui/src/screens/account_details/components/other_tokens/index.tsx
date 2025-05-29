@@ -20,6 +20,7 @@ type OtherTokensProps = {
   };
   loading: boolean;
   ibcParsingInProgress?: boolean;
+  erc20ParsingInProgress?: boolean;
 };
 
 const OtherTokens: FC<OtherTokensProps> = ({
@@ -27,6 +28,7 @@ const OtherTokens: FC<OtherTokensProps> = ({
   otherTokens,
   loading,
   ibcParsingInProgress,
+  erc20ParsingInProgress,
 }) => {
   const { t } = useAppTranslation('accounts');
   const { classes } = useStyles();
@@ -53,6 +55,7 @@ const OtherTokens: FC<OtherTokensProps> = ({
             className={display.hiddenUntilLg}
             items={items}
             ibcParsingInProgress={ibcParsingInProgress}
+            erc20ParsingInProgress={erc20ParsingInProgress}
           />
           <Mobile
             className={display.hiddenWhenLg}
