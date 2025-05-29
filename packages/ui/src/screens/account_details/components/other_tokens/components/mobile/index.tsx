@@ -5,13 +5,15 @@ import { FC, Fragment } from 'react';
 import { formatNumber } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import useStyles from '@/screens/account_details/components/other_tokens/components/mobile/styles';
+import { CircularProgress } from '@mui/material';
 
 type MobileProps = {
   className?: string;
   items?: OtherTokenType[];
+  ibcParsingInProgress?: boolean;
 };
 
-const Mobile: FC<MobileProps> = ({ className, items }) => {
+const Mobile: FC<MobileProps> = ({ className, items, ibcParsingInProgress }) => {
   const { classes } = useStyles();
   const { t } = useAppTranslation('accounts');
   return (
@@ -35,16 +37,18 @@ const Mobile: FC<MobileProps> = ({ className, items }) => {
                   {x.denom.toUpperCase()}
                 </Typography>
               </div>
-              {x.parsedDenom && x.denom !== x.parsedDenom && (
-                <div className={classes.item}>
-                  <Typography variant="h4" className="label">
-                    {t('symbol')}
-                  </Typography>
-                  <Typography variant="body1" className="value">
-                    {x.parsedDenom}
-                  </Typography>
-                </div>
-              )}
+              <div className={classes.item}>
+                <Typography variant="h4" className="label">
+                  {t('symbol')}
+                </Typography>
+                <Typography variant="body1" className="value">
+                  {ibcParsingInProgress ? (
+                    <CircularProgress size={16} />
+                  ) : (
+                    (x.parsedDenom?.toUpperCase() ?? '')
+                  )}
+                </Typography>
+              </div>
 
               <div className={classes.item}>
                 <Typography variant="h4" className="label">

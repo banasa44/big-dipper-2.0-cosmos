@@ -261,6 +261,7 @@ export const useAccountProfileDetails = () => {
 export const useAccountBalance = () => {
   const router = useRouter();
   const [state, setState] = useState<AccountBalanceState>(balanceInitialState);
+  const [ibcParsingInProgress, setIbcParsingInProgress] = useState(false);
 
   const handleSetState = useCallback(
     (stateChange: (prevState: AccountBalanceState) => AccountBalanceState) => {
@@ -311,6 +312,7 @@ export const useAccountBalance = () => {
       if (state.otherTokens.data.length) {
         const toParse = state.otherTokens.data.filter((t) => isIbcDenom(t.denom));
         if (toParse.length) {
+          setIbcParsingInProgress(true);
           const parsedTokens = await Promise.all(
             toParse.map(async (token) => {
               try {
@@ -344,6 +346,7 @@ export const useAccountBalance = () => {
               },
             };
           });
+          setIbcParsingInProgress(false);
         }
       }
     }
@@ -352,7 +355,7 @@ export const useAccountBalance = () => {
     }
   }, [state.otherTokens.data, state.loading, handleSetState]);
 
-  return { state };
+  return { state, ibcParsingInProgress };
 };
 
 export const useAccountWithdrawalAddr = () => {
