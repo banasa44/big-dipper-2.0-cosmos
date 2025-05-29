@@ -317,8 +317,7 @@ export const useAccountBalance = () => {
                 const parsedDenom = await fetchParseIbcDenom(token.denom);
                 return {
                   ...token,
-                  originalDenom: token.denom,
-                  denom: parsedDenom || token.denom,
+                  parsedDenom: parsedDenom || undefined,
                 };
               } catch (error) {
                 console.error(`Failed to parse IBC token ${token.denom}:`, error);
@@ -331,7 +330,7 @@ export const useAccountBalance = () => {
             const updatedTokens = [...prevState.otherTokens.data];
 
             parsedTokens.forEach((parsedToken) => {
-              const index = updatedTokens.findIndex((t) => t.denom === parsedToken.originalDenom);
+              const index = updatedTokens.findIndex((t) => t.denom === parsedToken.denom);
               if (index >= 0) {
                 updatedTokens[index] = parsedToken;
               }
