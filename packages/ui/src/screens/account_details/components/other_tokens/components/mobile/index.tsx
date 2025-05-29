@@ -2,7 +2,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import useAppTranslation from '@/hooks/useAppTranslation';
 import { FC, Fragment } from 'react';
-import { formatNumber } from '@/utils/format_token';
+import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import useStyles from '@/screens/account_details/components/other_tokens/components/mobile/styles';
 import { CircularProgress } from '@mui/material';
@@ -45,7 +45,7 @@ const Mobile: FC<MobileProps> = ({ className, items, ibcParsingInProgress }) => 
                   {ibcParsingInProgress ? (
                     <CircularProgress size={16} />
                   ) : (
-                    (x.parsedDenom?.toUpperCase() ?? '')
+                    formatSymbol(x.parsedDenom)
                   )}
                 </Typography>
               </div>

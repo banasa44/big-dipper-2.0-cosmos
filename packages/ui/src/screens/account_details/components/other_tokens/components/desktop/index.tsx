@@ -5,7 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useAppTranslation from '@/hooks/useAppTranslation';
 import { FC } from 'react';
-import { formatNumber } from '@/utils/format_token';
+import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import { columns } from '@/screens/account_details/components/other_tokens/components/desktop/utils';
 import { CircularProgress } from '@mui/material';
@@ -22,7 +22,7 @@ const Desktop: FC<DesktopProps> = ({ className, items, ibcParsingInProgress }) =
   const formattedItems = items?.map((x, i) => ({
     key: i,
     token: x.denom.toUpperCase(),
-    symbol: x.parsedDenom?.toUpperCase() ?? '',
+    symbol: formatSymbol(x.parsedDenom),
     commission: x.commission ? formatNumber(x.commission.value, x.commission.exponent) : '',
     available: formatNumber(x.available.value, x.available.exponent),
     reward: x.reward ? formatNumber(x.reward.value, x.reward.exponent) : '',
