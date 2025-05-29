@@ -35,6 +35,17 @@ const Mobile: FC<MobileProps> = ({ className, items }) => {
                   {x.denom.toUpperCase()}
                 </Typography>
               </div>
+              {x.parsedDenom && x.denom !== x.parsedDenom && (
+                <div className={classes.item}>
+                  <Typography variant="h4" className="label">
+                    {t('symbol')}
+                  </Typography>
+                  <Typography variant="body1" className="value">
+                    {x.parsedDenom}
+                  </Typography>
+                </div>
+              )}
+
               <div className={classes.item}>
                 <Typography variant="h4" className="label">
                   {t('available')}
