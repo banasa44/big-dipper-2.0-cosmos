@@ -8,8 +8,7 @@ import { FC } from 'react';
 import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import { columns } from '@/screens/account_details/components/other_tokens/components/desktop/utils';
-import { CircularProgress, Link, Tooltip } from '@mui/material';
-import { isIbcDenom } from '@/utils/ibc';
+import { CircularProgress, Link } from '@mui/material';
 import chainConfig from '@/chainConfig';
 
 const explorerUrl = chainConfig().endpoints.blockExplorer;
@@ -36,7 +35,6 @@ const Desktop: FC<DesktopProps> = ({
     available: formatNumber(x.available.value, x.available.exponent),
     reward: x.reward ? formatNumber(x.reward.value, x.reward.exponent) : '',
     erc20Address: x.erc20Address,
-    isDenom: isIbcDenom(x.denom),
   }));
   return (
     <div className={className}>

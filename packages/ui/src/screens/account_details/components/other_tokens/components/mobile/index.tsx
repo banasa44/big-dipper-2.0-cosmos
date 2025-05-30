@@ -5,15 +5,24 @@ import { FC, Fragment } from 'react';
 import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import useStyles from '@/screens/account_details/components/other_tokens/components/mobile/styles';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Link } from '@mui/material';
+import chainConfig from '@/chainConfig';
 
 type MobileProps = {
   className?: string;
   items?: OtherTokenType[];
   ibcParsingInProgress?: boolean;
+  erc20ParsingInProgress?: boolean;
 };
 
-const Mobile: FC<MobileProps> = ({ className, items, ibcParsingInProgress }) => {
+const explorerUrl = chainConfig().endpoints.blockExplorer;
+
+const Mobile: FC<MobileProps> = ({
+  className,
+  items,
+  ibcParsingInProgress,
+  erc20ParsingInProgress,
+}) => {
   const { classes } = useStyles();
   const { t } = useAppTranslation('accounts');
   return (
@@ -33,8 +42,29 @@ const Mobile: FC<MobileProps> = ({ className, items, ibcParsingInProgress }) => 
                 <Typography variant="h4" className="label">
                   {t('token')}
                 </Typography>
-                <Typography variant="body1" className="value">
-                  {x.denom.toUpperCase()}
+                <Typography
+                  variant="body1"
+                  className="value"
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                  {ibcParsingInProgress ? (
+                    <CircularProgress size={16} />
+                  ) : x.erc20Address ? (
+                    <Link
+                      href={`${explorerUrl}/token/${x.erc20Address}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {x.denom.toUpperCase()}
+                    </Link>
+                  ) : (
+                    <>
+                      {x.denom.toUpperCase()}
+                      {erc20ParsingInProgress ? (
+                        <CircularProgress size={12} style={{ marginLeft: 4 }} />
+                      ) : null}
+                    </>
+                  )}
                 </Typography>
               </div>
               <div className={classes.item}>

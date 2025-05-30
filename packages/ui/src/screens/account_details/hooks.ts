@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import chainConfig from '@/chainConfig';
 import { useDesmosProfile } from '@/hooks/use_desmos_profile';
 import type {
@@ -261,8 +261,12 @@ export const useAccountProfileDetails = () => {
 export const useAccountBalance = () => {
   const router = useRouter();
   const [state, setState] = useState<AccountBalanceState>(balanceInitialState);
+
   const [ibcParsingInProgress, setIbcParsingInProgress] = useState(false);
   const [erc20ParsingInProgress, setErc20ParsingInProgress] = useState(false);
+
+  const ibcProcessed = useRef<Set<string>>(new Set());
+  const erc20Processed = useRef<Set<string>>(new Set());
 
   const handleSetState = useCallback(
     (stateChange: (prevState: AccountBalanceState) => AccountBalanceState) => {
@@ -308,94 +312,69 @@ export const useAccountBalance = () => {
     }
   }, [commission, available, delegation, unbonding, rewards, handleSetState]);
 
-  const ibcDenomsToParse = useMemo(
-    () =>
-      state.otherTokens.data
-        .filter((t) => isIbcDenom(t.denom) && t.parsedDenom == null)
-        .map((t) => t.denom),
-    [state.otherTokens.data]
-  );
+  const ibcDenoms = state.otherTokens.data.filter((t) => isIbcDenom(t.denom)).map((t) => t.denom);
 
-  const erc20DenomsToFetch = useMemo(
-    () =>
-      state.otherTokens.data
-        .filter((t) => isIbcDenom(t.denom) && !t.erc20Address)
-        .map((t) => t.denom),
-    [state.otherTokens.data]
-  );
+  const erc20Denoms = state.otherTokens.data.filter((t) => isIbcDenom(t.denom)).map((t) => t.denom);
 
   useEffect(() => {
-    console.log('Parsing IBC tokens:', ibcDenomsToParse);
-    if (state.loading || ibcDenomsToParse.length === 0) return;
+    if (state.loading) return;
+
+    const toParse = ibcDenoms.filter((d) => !ibcProcessed.current.has(d));
+    if (toParse.length === 0) return;
 
     setIbcParsingInProgress(true);
+    toParse.forEach((d) => ibcProcessed.current.add(d));
 
-    async function parseIbcTokens() {
+    (async () => {
       try {
-        const parsedTokens = await Promise.all(
-          ibcDenomsToParse.map(async (denom) => {
-            try {
-              const parsedDenom = await fetchParseIbcDenom(denom);
-              return { denom, parsedDenom: parsedDenom || undefined };
-            } catch (error) {
-              console.error(`Failed to parse IBC token ${denom}:`, error);
-              return { denom, parsedDenom: undefined };
-            }
+        const parsed = await Promise.all(
+          toParse.map(async (denom) => {
+            const pd = await fetchParseIbcDenom(denom).catch(() => undefined);
+            return { denom, parsedDenom: pd };
           })
         );
-
-        handleSetState((prevState) => {
-          const updatedTokens = prevState.otherTokens.data.map((token) => {
-            const found = parsedTokens.find((p) => p.denom === token.denom);
-            return found ? { ...token, parsedDenom: found.parsedDenom } : token;
+        handleSetState((prev) => {
+          const updated = prev.otherTokens.data.map((tok) => {
+            const found = parsed.find((p) => p.denom === tok.denom);
+            return found ? { ...tok, parsedDenom: found.parsedDenom } : tok;
           });
-          return {
-            ...prevState,
-            otherTokens: { data: updatedTokens, count: updatedTokens.length },
-          };
+          return { ...prev, otherTokens: { data: updated, count: updated.length } };
         });
       } finally {
         setIbcParsingInProgress(false);
       }
-    }
-
-    parseIbcTokens();
-  }, [state.loading, ibcDenomsToParse.join('|'), handleSetState]);
+    })();
+  }, [state.loading, ibcDenoms.join('|'), handleSetState]);
 
   useEffect(() => {
-    console.log('Fetching ERC20 addresses for denoms:', erc20DenomsToFetch);
-    if (state.loading || erc20DenomsToFetch.length === 0) return;
+    if (state.loading) return;
+
+    const toFetch = erc20Denoms.filter((d) => !erc20Processed.current.has(d));
+    if (toFetch.length === 0) return;
 
     setErc20ParsingInProgress(true);
+    toFetch.forEach((d) => erc20Processed.current.add(d));
 
-    async function fetchErc20Addresses() {
+    (async () => {
       try {
         const results = await Promise.all(
-          erc20DenomsToFetch.map(async (denom) => {
-            try {
-              const addr = await fetchErc20AddressForDenom(denom);
-              return { denom, erc20Address: addr || undefined };
-            } catch (error) {
-              console.error(`Failed to fetch ERC20 address for ${denom}:`, error);
-              return { denom, erc20Address: undefined };
-            }
+          toFetch.map(async (denom) => {
+            const addr = await fetchErc20AddressForDenom(denom).catch(() => undefined);
+            return { denom, erc20Address: addr };
           })
         );
-
         handleSetState((prev) => {
-          const updated = prev.otherTokens.data.map((old) => {
-            const f = results.find((x) => x.denom === old.denom);
-            return f ? { ...old, erc20Address: f.erc20Address } : old;
+          const updated = prev.otherTokens.data.map((tok) => {
+            const f = results.find((r) => r.denom === tok.denom);
+            return f ? { ...tok, erc20Address: f.erc20Address } : tok;
           });
           return { ...prev, otherTokens: { data: updated, count: updated.length } };
         });
       } finally {
         setErc20ParsingInProgress(false);
       }
-    }
-
-    fetchErc20Addresses();
-  }, [state.loading, erc20DenomsToFetch.join('|'), handleSetState]);
+    })();
+  }, [state.loading, erc20Denoms.join('|'), handleSetState]);
 
   return { state, ibcParsingInProgress, erc20ParsingInProgress };
 };

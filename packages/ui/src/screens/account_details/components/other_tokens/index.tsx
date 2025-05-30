@@ -61,6 +61,7 @@ const OtherTokens: FC<OtherTokensProps> = ({
             className={display.hiddenWhenLg}
             items={items}
             ibcParsingInProgress={ibcParsingInProgress}
+            erc20ParsingInProgress={erc20ParsingInProgress}
           />
           <Pagination
             className={classes.paginate}
