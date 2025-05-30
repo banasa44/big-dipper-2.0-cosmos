@@ -22,7 +22,7 @@ import {
 } from '@/screens/account_details/utils';
 import { formatToken } from '@/utils/format_token';
 import { getDenom } from '@/utils/get_denom';
-import { fetchErc20AddressForDenom, fetchParseIbcDenom, isIbcDenom } from '@/utils/parse_ibc';
+import { fetchErc20AddressForDenom, fetchParseIbcDenom, isIbcDenom } from '@/utils/ibc';
 
 const { extra, primaryTokenUnit, tokenUnits } = chainConfig();
 
@@ -312,47 +312,57 @@ export const useAccountBalance = () => {
 
   useEffect(() => {
     async function parseIbcTokens() {
-      if (state.otherTokens.data.length) {
-        const toParse = state.otherTokens.data.filter((t) => isIbcDenom(t.denom));
-        if (toParse.length) {
-          setIbcParsingInProgress(true);
-          const parsedTokens = await Promise.all(
-            toParse.map(async (token) => {
-              try {
-                const parsedDenom = await fetchParseIbcDenom(token.denom);
-                return {
-                  ...token,
-                  parsedDenom: parsedDenom || undefined,
-                };
-              } catch (error) {
-                console.error(`Failed to parse IBC token ${token.denom}:`, error);
-                return token;
-              }
-            })
-          );
+      if (!state.otherTokens.data.length) {
+        return;
+      }
 
-          handleSetState((prevState) => {
-            const updatedTokens = [...prevState.otherTokens.data];
+      const toParse = state.otherTokens.data.filter((t) => isIbcDenom(t.denom));
 
-            parsedTokens.forEach((parsedToken) => {
-              const index = updatedTokens.findIndex((t) => t.denom === parsedToken.denom);
-              if (index >= 0) {
-                updatedTokens[index] = parsedToken;
-              }
-            });
+      if (!toParse.length) {
+        return;
+      }
 
-            return {
-              ...prevState,
-              otherTokens: {
-                data: updatedTokens,
-                count: updatedTokens.length,
-              },
-            };
+      setIbcParsingInProgress(true);
+
+      try {
+        const parsedTokens = await Promise.all(
+          toParse.map(async (token) => {
+            try {
+              const parsedDenom = await fetchParseIbcDenom(token.denom);
+              return {
+                ...token,
+                parsedDenom: parsedDenom || undefined,
+              };
+            } catch (error) {
+              console.error(`Failed to parse IBC token ${token.denom}:`, error);
+              return token;
+            }
+          })
+        );
+
+        handleSetState((prevState) => {
+          const updatedTokens = [...prevState.otherTokens.data];
+
+          parsedTokens.forEach((parsedToken) => {
+            const index = updatedTokens.findIndex((t) => t.denom === parsedToken.denom);
+            if (index >= 0) {
+              updatedTokens[index] = parsedToken;
+            }
           });
-          setIbcParsingInProgress(false);
-        }
+
+          return {
+            ...prevState,
+            otherTokens: {
+              data: updatedTokens,
+              count: updatedTokens.length,
+            },
+          };
+        });
+      } finally {
+        setIbcParsingInProgress(false);
       }
     }
+
     if (!state.loading) {
       parseIbcTokens();
     }

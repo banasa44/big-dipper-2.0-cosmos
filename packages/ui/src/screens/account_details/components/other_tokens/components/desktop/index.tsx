@@ -9,7 +9,7 @@ import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import { columns } from '@/screens/account_details/components/other_tokens/components/desktop/utils';
 import { CircularProgress, Link } from '@mui/material';
-import { isIbcDenom } from '@/utils/parse_ibc';
+import { isIbcDenom } from '@/utils/ibc';
 
 type DesktopProps = {
   className?: string;

@@ -9,7 +9,10 @@ import { QueryClient, setupIbcExtension } from '@cosmjs/stargate';
  */
 export function getCurrentRpcEndpoint() {
   const { endpoints } = chainConfig();
-  return endpoints.cosmosRpc!;
+  if (!endpoints.cosmosRpc) {
+    throw new Error('Cosmos RPC endpoint is not defined in chainConfig.');
+  }
+  return endpoints.cosmosRpc;
 }
 
 let ibcQueryClient: (QueryClient & IbcExtension) | null = null;
