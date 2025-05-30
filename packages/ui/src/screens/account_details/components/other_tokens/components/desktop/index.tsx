@@ -39,7 +39,7 @@ const Desktop: FC<DesktopProps> = ({ className, items, ibcParsingInProgress }) =
                 align={column.align}
                 style={{ width: `${column.width}%` }}
               >
-                {column.key === 'symbol' ? t('symbol') : t(column.key)}
+                {t(column.key)}
               </TableCell>
             ))}
           </TableRow>
