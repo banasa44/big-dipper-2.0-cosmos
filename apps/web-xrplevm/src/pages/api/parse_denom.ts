@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { parseIbcDenom } from '@/utils/parse_ibc';
+import { parseIbcDenom } from '@/utils/ibc';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const hash = req.query.hash as string;
