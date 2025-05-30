@@ -22,7 +22,7 @@ import {
 } from '@/screens/account_details/utils';
 import { formatToken } from '@/utils/format_token';
 import { getDenom } from '@/utils/get_denom';
-import { fetchParseIbcDenom, isIbcDenom } from '@/utils/parse_ibc';
+import { fetchParseIbcDenom, isIbcDenom } from '@/utils/ibc';
 
 const { extra, primaryTokenUnit, tokenUnits } = chainConfig();
 
