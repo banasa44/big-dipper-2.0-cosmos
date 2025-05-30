@@ -1,7 +1,7 @@
 import { createMocks } from 'node-mocks-http';
 import handler from './erc20_for_denom';
 
-jest.mock('@/utils/parse_ibc', () => ({
+jest.mock('@/utils/ibc', () => ({
   getErc20AddressForDenom: jest.fn().mockImplementation(async (denom) => {
     if (denom === 'ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518') {
       return '0xaF43A2dA8E4790Ede12566649D0c2F97716b8518';

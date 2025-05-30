@@ -8,9 +8,11 @@ import { FC } from 'react';
 import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import { columns } from '@/screens/account_details/components/other_tokens/components/desktop/utils';
-import { CircularProgress, Link } from '@mui/material';
+import { CircularProgress, Link, Tooltip } from '@mui/material';
 import { isIbcDenom } from '@/utils/ibc';
+import chainConfig from '@/chainConfig';
 
+const explorerUrl = chainConfig().endpoints.blockExplorer;
 type DesktopProps = {
   className?: string;
   items?: OtherTokenType[];
@@ -36,7 +38,6 @@ const Desktop: FC<DesktopProps> = ({
     erc20Address: x.erc20Address,
     isDenom: isIbcDenom(x.denom),
   }));
-
   return (
     <div className={className}>
       <Table>
@@ -56,36 +57,48 @@ const Desktop: FC<DesktopProps> = ({
         <TableBody>
           {formattedItems?.map((row) => (
             <TableRow key={`holders-row-${row.key}`}>
-              {columns.map((column) => (
-                <TableCell
-                  key={`holders-row-${row.key}-${column.key}`}
-                  align={column.align}
-                  style={{ width: `${column.width}%` }}
-                >
-                  {column.key === 'symbol' && ibcParsingInProgress ? (
-                    <CircularProgress size={16} />
-                  ) : column.key === 'token' && row.isDenom ? (
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      {row.erc20Address ? (
-                        <Link
-                          href={`https://explorer.testnet.xrplevm.org/token/${row.erc20Address}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {row.token}
-                        </Link>
-                      ) : (
-                        row.token
-                      )}
-                      {erc20ParsingInProgress && (
-                        <CircularProgress size={12} style={{ marginLeft: '4px' }} />
-                      )}
-                    </div>
-                  ) : (
-                    row[column.key as keyof typeof row]
-                  )}
-                </TableCell>
-              ))}
+              {columns.map((column) => {
+                if (column.key === 'symbol') {
+                  return (
+                    <TableCell key={column.key} align={column.align}>
+                      {ibcParsingInProgress ? <CircularProgress size={16} /> : row.symbol}
+                    </TableCell>
+                  );
+                }
+
+                if (column.key === 'token') {
+                  return (
+                    <TableCell key={column.key} align={column.align}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {row.erc20Address ? (
+                          <Link
+                            href={`${explorerUrl}/token/${row.erc20Address}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {row.token}
+                          </Link>
+                        ) : (
+                          <span>{row.token}</span>
+                        )}
+                        {!row.erc20Address && erc20ParsingInProgress ? (
+                          <CircularProgress size={12} style={{ marginLeft: 4 }} />
+                        ) : null}
+                      </div>
+                    </TableCell>
+                  );
+                }
+
+                return (
+                  <TableCell
+                    key={column.key}
+                    align={column.align}
+                    style={{ width: `${column.width}%` }}
+                  >
+                    {row[column.key as keyof typeof row]}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           ))}
         </TableBody>
@@ -93,5 +106,4 @@ const Desktop: FC<DesktopProps> = ({
     </div>
   );
 };
-
 export default Desktop;

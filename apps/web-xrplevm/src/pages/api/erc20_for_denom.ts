@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getErc20AddressForDenom } from '@/utils/parse_ibc';
+import { getErc20AddressForDenom } from '@/utils/ibc';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const denom = req.query.denom as string;

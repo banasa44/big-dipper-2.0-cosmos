@@ -16,7 +16,11 @@ const AccountDetails = () => {
   const { classes } = useStyles();
   const { profileState } = useAccountProfileDetails();
   const accountBalance = useAccountBalance();
-  const { state: accountBalanceState, ibcParsingInProgress } = accountBalance;
+  const {
+    state: accountBalanceState,
+    ibcParsingInProgress,
+    erc20ParsingInProgress,
+  } = accountBalance;
 
   return (
     <>
@@ -57,6 +61,7 @@ const AccountDetails = () => {
                   otherTokens={accountBalanceState.otherTokens}
                   loading={accountBalanceState.loading}
                   ibcParsingInProgress={ibcParsingInProgress}
+                  erc20ParsingInProgress={erc20ParsingInProgress}
                 />
               </>
             ) : null}
