@@ -18,16 +18,10 @@ type OtherTokensProps = {
     data: OtherTokenType[];
     count: number;
   };
-  loading: boolean;
   otherTokensProcessing: boolean;
 };
 
-const OtherTokens: FC<OtherTokensProps> = ({
-  className,
-  otherTokens,
-  loading,
-  otherTokensProcessing,
-}) => {
+const OtherTokens: FC<OtherTokensProps> = ({ className, otherTokens, otherTokensProcessing }) => {
   const { t } = useAppTranslation('accounts');
   const { classes } = useStyles();
   const display = useDisplayStyles().classes;
@@ -45,20 +39,12 @@ const OtherTokens: FC<OtherTokensProps> = ({
   return (
     <Box className={className}>
       <Typography variant="h2">{t('otherTokens')}</Typography>
-      {loading ? (
+      {otherTokensProcessing ? (
         <Loading />
       ) : (
         <>
-          <Desktop
-            className={display.hiddenUntilLg}
-            items={items}
-            otherTokensProcessing={otherTokensProcessing}
-          />
-          <Mobile
-            className={display.hiddenWhenLg}
-            items={items}
-            otherTokensProcessing={otherTokensProcessing}
-          />
+          <Desktop className={display.hiddenUntilLg} items={items} />
+          <Mobile className={display.hiddenWhenLg} items={items} />
           <Pagination
             className={classes.paginate}
             total={count}

@@ -5,29 +5,19 @@ import { FC, Fragment } from 'react';
 import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import useStyles from '@/screens/account_details/components/other_tokens/components/mobile/styles';
-import { CircularProgress, Link } from '@mui/material';
+import { Link } from '@mui/material';
 import chainConfig from '@/chainConfig';
-import Loading from '@/components/loading';
 
 type MobileProps = {
   className?: string;
   items?: OtherTokenType[];
-  otherTokensProcessing?: boolean;
 };
 
 const explorerUrl = chainConfig().endpoints.blockExplorer;
 
-const Mobile: FC<MobileProps> = ({ className, items, otherTokensProcessing }) => {
+const Mobile: FC<MobileProps> = ({ className, items }) => {
   const { classes } = useStyles();
   const { t } = useAppTranslation('accounts');
-
-  if (otherTokensProcessing) {
-    return (
-      <div className={className}>
-        <Loading />
-      </div>
-    );
-  }
 
   return (
     <div className={className}>

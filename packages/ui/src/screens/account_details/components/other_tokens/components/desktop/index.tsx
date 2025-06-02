@@ -10,16 +10,14 @@ import type { OtherTokenType } from '@/screens/account_details/types';
 import { columns } from '@/screens/account_details/components/other_tokens/components/desktop/utils';
 import { Link } from '@mui/material';
 import chainConfig from '@/chainConfig';
-import Loading from '@/components/loading';
 
 const explorerUrl = chainConfig().endpoints.blockExplorer;
 type DesktopProps = {
   className?: string;
   items?: OtherTokenType[];
-  otherTokensProcessing?: boolean;
 };
 
-const Desktop: FC<DesktopProps> = ({ className, items, otherTokensProcessing }) => {
+const Desktop: FC<DesktopProps> = ({ className, items }) => {
   const { t } = useAppTranslation('accounts');
 
   const formattedItems = items?.map((x, i) => ({
@@ -32,13 +30,6 @@ const Desktop: FC<DesktopProps> = ({ className, items, otherTokensProcessing }) 
     erc20Address: x.erc20Address,
   }));
 
-  if (otherTokensProcessing) {
-    return (
-      <div className={className}>
-        <Loading />
-      </div>
-    );
-  }
   return (
     <div className={className}>
       <Table>

@@ -55,7 +55,6 @@ const AccountDetails = () => {
                 <OtherTokens
                   className={classes.otherTokens}
                   otherTokens={accountBalanceState.otherTokens}
-                  loading={accountBalanceState.loading}
                   otherTokensProcessing={otherTokensProcessing}
                 />
               </>
