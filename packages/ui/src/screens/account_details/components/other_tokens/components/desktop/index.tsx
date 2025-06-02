@@ -15,16 +15,10 @@ const explorerUrl = chainConfig().endpoints.blockExplorer;
 type DesktopProps = {
   className?: string;
   items?: OtherTokenType[];
-  ibcParsingInProgress?: boolean;
-  erc20ParsingInProgress?: boolean;
+  otherTokensProcessing?: boolean;
 };
 
-const Desktop: FC<DesktopProps> = ({
-  className,
-  items,
-  ibcParsingInProgress,
-  erc20ParsingInProgress,
-}) => {
+const Desktop: FC<DesktopProps> = ({ className, items, otherTokensProcessing }) => {
   const { t } = useAppTranslation('accounts');
 
   const formattedItems = items?.map((x, i) => ({
@@ -36,6 +30,15 @@ const Desktop: FC<DesktopProps> = ({
     reward: x.reward ? formatNumber(x.reward.value, x.reward.exponent) : '',
     erc20Address: x.erc20Address,
   }));
+
+  if (otherTokensProcessing) {
+    return (
+      <div className={className}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
     <div className={className}>
       <Table>
@@ -59,7 +62,7 @@ const Desktop: FC<DesktopProps> = ({
                 if (column.key === 'symbol') {
                   return (
                     <TableCell key={column.key} align={column.align}>
-                      {ibcParsingInProgress ? <CircularProgress size={16} /> : row.symbol}
+                      {row.symbol}
                     </TableCell>
                   );
                 }
@@ -67,22 +70,17 @@ const Desktop: FC<DesktopProps> = ({
                 if (column.key === 'token') {
                   return (
                     <TableCell key={column.key} align={column.align}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {row.erc20Address ? (
-                          <Link
-                            href={`${explorerUrl}/token/${row.erc20Address}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {row.token}
-                          </Link>
-                        ) : (
-                          <span>{row.token}</span>
-                        )}
-                        {!row.erc20Address && erc20ParsingInProgress ? (
-                          <CircularProgress size={12} style={{ marginLeft: 4 }} />
-                        ) : null}
-                      </div>
+                      {row.erc20Address ? (
+                        <Link
+                          href={`${explorerUrl}/token/${row.erc20Address}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {row.token}
+                        </Link>
+                      ) : (
+                        <span>{row.token}</span>
+                      )}
                     </TableCell>
                   );
                 }

@@ -4,13 +4,12 @@ export const columns: {
   width: number;
 }[] = [
   {
-    key: 'token',
+    key: 'symbol',
     width: 25,
   },
   {
-    key: 'symbol',
+    key: 'token',
     width: 25,
-    align: 'right',
   },
   {
     key: 'available',

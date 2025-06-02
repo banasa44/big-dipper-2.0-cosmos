@@ -19,16 +19,14 @@ type OtherTokensProps = {
     count: number;
   };
   loading: boolean;
-  ibcParsingInProgress?: boolean;
-  erc20ParsingInProgress?: boolean;
+  otherTokensProcessing: boolean;
 };
 
 const OtherTokens: FC<OtherTokensProps> = ({
   className,
   otherTokens,
   loading,
-  ibcParsingInProgress,
-  erc20ParsingInProgress,
+  otherTokensProcessing,
 }) => {
   const { t } = useAppTranslation('accounts');
   const { classes } = useStyles();
@@ -54,14 +52,12 @@ const OtherTokens: FC<OtherTokensProps> = ({
           <Desktop
             className={display.hiddenUntilLg}
             items={items}
-            ibcParsingInProgress={ibcParsingInProgress}
-            erc20ParsingInProgress={erc20ParsingInProgress}
+            otherTokensProcessing={otherTokensProcessing}
           />
           <Mobile
             className={display.hiddenWhenLg}
             items={items}
-            ibcParsingInProgress={ibcParsingInProgress}
-            erc20ParsingInProgress={erc20ParsingInProgress}
+            otherTokensProcessing={otherTokensProcessing}
           />
           <Pagination
             className={classes.paginate}

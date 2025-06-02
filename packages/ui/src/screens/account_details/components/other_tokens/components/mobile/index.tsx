@@ -11,20 +11,22 @@ import chainConfig from '@/chainConfig';
 type MobileProps = {
   className?: string;
   items?: OtherTokenType[];
-  ibcParsingInProgress?: boolean;
-  erc20ParsingInProgress?: boolean;
+  otherTokensProcessing?: boolean;
 };
 
 const explorerUrl = chainConfig().endpoints.blockExplorer;
 
-const Mobile: FC<MobileProps> = ({
-  className,
-  items,
-  ibcParsingInProgress,
-  erc20ParsingInProgress,
-}) => {
+const Mobile: FC<MobileProps> = ({ className, items, otherTokensProcessing }) => {
   const { classes } = useStyles();
   const { t } = useAppTranslation('accounts');
+  if (otherTokensProcessing) {
+    return (
+      <div className={className}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
     <div className={className}>
       {items?.map((x, i) => {
@@ -40,16 +42,19 @@ const Mobile: FC<MobileProps> = ({
             <div className={classes.list}>
               <div className={classes.item}>
                 <Typography variant="h4" className="label">
+                  {t('symbol')}
+                </Typography>
+                <Typography variant="body1" className="value">
+                  {formatSymbol(x.parsedDenom)}
+                </Typography>
+              </div>
+
+              <div className={classes.item}>
+                <Typography variant="h4" className="label">
                   {t('token')}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  className="value"
-                  style={{ display: 'flex', alignItems: 'center' }}
-                >
-                  {ibcParsingInProgress ? (
-                    <CircularProgress size={16} />
-                  ) : x.erc20Address ? (
+                <Typography variant="body1" className="value">
+                  {x.erc20Address ? (
                     <Link
                       href={`${explorerUrl}/token/${x.erc20Address}`}
                       target="_blank"
@@ -58,24 +63,7 @@ const Mobile: FC<MobileProps> = ({
                       {x.denom.toUpperCase()}
                     </Link>
                   ) : (
-                    <>
-                      {x.denom.toUpperCase()}
-                      {erc20ParsingInProgress ? (
-                        <CircularProgress size={12} style={{ marginLeft: 4 }} />
-                      ) : null}
-                    </>
-                  )}
-                </Typography>
-              </div>
-              <div className={classes.item}>
-                <Typography variant="h4" className="label">
-                  {t('symbol')}
-                </Typography>
-                <Typography variant="body1" className="value">
-                  {ibcParsingInProgress ? (
-                    <CircularProgress size={16} />
-                  ) : (
-                    formatSymbol(x.parsedDenom)
+                    <span>{x.denom.toUpperCase()}</span>
                   )}
                 </Typography>
               </div>
