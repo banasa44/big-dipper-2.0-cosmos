@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import chainConfig from '@/chainConfig';
 import { useDesmosProfile } from '@/hooks/use_desmos_profile';
 import type {
@@ -327,7 +327,11 @@ export const useAccountBalance = () => {
     (async () => {
       try {
         const jobs = ibcDenoms.map(async (denom) => {
-          const token = state.otherTokens.data.find((t) => t.denom === denom)!;
+          const token = state.otherTokens.data.find((t) => t.denom === denom) || {
+            denom,
+            parsedDenom: undefined,
+            erc20Address: undefined,
+          };
           const [parsedDenom, erc20Address] = await Promise.all([
             token.parsedDenom == null
               ? fetchParseIbcDenom(denom).catch(() => undefined)
