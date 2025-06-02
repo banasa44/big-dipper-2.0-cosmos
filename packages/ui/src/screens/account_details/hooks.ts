@@ -403,6 +403,7 @@ export const useAccountWithdrawalAddr = () => {
 export const useAccountRewards = () => {
   const router = useRouter();
   const [state, setState] = useState(rewardsInitialState);
+  const [exists, setExists] = useState(false);
 
   const handleSetState = useCallback(
     (stateChange: (prevState: AccountRewardsState) => AccountRewardsState) => {
@@ -432,9 +433,16 @@ export const useAccountRewards = () => {
         rewards: updatedRewards,
         loading: false,
       }));
+      setExists(true);
+    } else {
+      setExists(false);
+      handleSetState((prevState) => ({
+        ...prevState,
+        loading: false,
+      }));
     }
   }, [rewards, handleSetState]);
 
-  return { state };
+  return { state, exists };
 };
 export { useRewards };
