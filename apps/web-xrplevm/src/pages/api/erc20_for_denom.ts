@@ -9,7 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Construct the full IBC denom from the hash
     const erc20Address = await getErc20AddressForDenom(denom);
 
     if (erc20Address) {
