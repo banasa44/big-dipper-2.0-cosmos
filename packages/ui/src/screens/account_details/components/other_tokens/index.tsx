@@ -18,10 +18,10 @@ type OtherTokensProps = {
     data: OtherTokenType[];
     count: number;
   };
-  otherTokensProcessing: boolean;
+  loading: boolean;
 };
 
-const OtherTokens: FC<OtherTokensProps> = ({ className, otherTokens, otherTokensProcessing }) => {
+const OtherTokens: FC<OtherTokensProps> = ({ className, otherTokens, loading }) => {
   const { t } = useAppTranslation('accounts');
   const { classes } = useStyles();
   const display = useDisplayStyles().classes;
@@ -39,7 +39,7 @@ const OtherTokens: FC<OtherTokensProps> = ({ className, otherTokens, otherTokens
   return (
     <Box className={className}>
       <Typography variant="h2">{t('otherTokens')}</Typography>
-      {otherTokensProcessing ? (
+      {loading ? (
         <Loading />
       ) : (
         <>
