@@ -21,7 +21,7 @@ const AccountDetails = () => {
   const { profileState } = useAccountProfileDetails();
   const accountBalance = useAccountBalance();
   const { state: accountBalanceState, otherTokensProcessing } = accountBalance;
-  const { state, exists } = useAccountRewards();
+  const { exists } = useAccountRewards();
 
   return (
     <>
