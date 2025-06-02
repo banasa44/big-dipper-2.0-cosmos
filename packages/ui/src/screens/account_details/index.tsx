@@ -21,7 +21,7 @@ const AccountDetails = () => {
   const { profileState } = useAccountProfileDetails();
   const accountBalance = useAccountBalance();
   const { state: accountBalanceState, otherTokensProcessing } = accountBalance;
-  const { exists } = useAccountRewards();
+  const accountRewards = useAccountRewards();
 
   return (
     <>
@@ -66,7 +66,7 @@ const AccountDetails = () => {
             ) : null}
             {!profileState.loading && !accountBalanceState.loading ? (
               <>
-                {exists && <Staking className={classes.staking} />}
+                {accountRewards.exists && <Staking className={classes.staking} />}{' '}
                 <Transactions className={classes.transactions} />
               </>
             ) : null}
