@@ -8,8 +8,9 @@ import { FC } from 'react';
 import { formatNumber, formatSymbol } from '@/utils/format_token';
 import type { OtherTokenType } from '@/screens/account_details/types';
 import { columns } from '@/screens/account_details/components/other_tokens/components/desktop/utils';
-import { CircularProgress, Link } from '@mui/material';
+import { Link } from '@mui/material';
 import chainConfig from '@/chainConfig';
+import Loading from '@/components/loading';
 
 const explorerUrl = chainConfig().endpoints.blockExplorer;
 type DesktopProps = {
@@ -34,11 +35,10 @@ const Desktop: FC<DesktopProps> = ({ className, items, otherTokensProcessing }) 
   if (otherTokensProcessing) {
     return (
       <div className={className}>
-        <CircularProgress />
+        <Loading />
       </div>
     );
   }
-
   return (
     <div className={className}>
       <Table>

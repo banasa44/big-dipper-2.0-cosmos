@@ -7,6 +7,7 @@ import type { OtherTokenType } from '@/screens/account_details/types';
 import useStyles from '@/screens/account_details/components/other_tokens/components/mobile/styles';
 import { CircularProgress, Link } from '@mui/material';
 import chainConfig from '@/chainConfig';
+import Loading from '@/components/loading';
 
 type MobileProps = {
   className?: string;
@@ -19,10 +20,11 @@ const explorerUrl = chainConfig().endpoints.blockExplorer;
 const Mobile: FC<MobileProps> = ({ className, items, otherTokensProcessing }) => {
   const { classes } = useStyles();
   const { t } = useAppTranslation('accounts');
+
   if (otherTokensProcessing) {
     return (
       <div className={className}>
-        <CircularProgress />
+        <Loading />
       </div>
     );
   }
