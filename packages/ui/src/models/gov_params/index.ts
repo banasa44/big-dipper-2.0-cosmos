@@ -18,6 +18,14 @@ class GovParams {
   public votingParams: {
     votingPeriod: number;
   };
+  public expeditedParams: {
+    expeditedMinDeposit: Array<{
+      denom: string;
+      amount: string;
+    }>;
+    expeditedThreshold: string;
+    expeditedVotingPeriod: number;
+  };
 
   constructor(payload: object) {
     this.depositParams = R.pathOr(
@@ -44,6 +52,15 @@ class GovParams {
       ['votingParams'],
       payload
     );
+    this.expeditedParams = R.pathOr(
+      {
+        expeditedMinDeposit: [],
+        expeditedThreshold: '',
+        expeditedVotingPeriod: 0,
+      },
+      ['params'],
+      payload
+    );
   }
 
   static fromJson(data: object): GovParams {
@@ -66,6 +83,18 @@ class GovParams {
       },
       votingParams: {
         votingPeriod: R.pathOr(0, ['votingParams', 'voting_period'], data),
+      },
+      expeditedParams: {
+        expeditedMinDeposit: R.pathOr<GovParams['expeditedParams']['expeditedMinDeposit']>(
+          [],
+          ['params', 'expedited_min_deposit'],
+          data
+        ).map((x) => ({
+          denom: x.denom,
+          amount: String(x.amount),
+        })),
+        expeditedThreshold: R.pathOr('0', ['params', 'expedited_threshold'], data),
+        expeditedVotingPeriod: R.pathOr(0, ['params', 'expedited_voting_period'], data),
       },
     };
   }

@@ -79,6 +79,7 @@ const formatDistribution = (data: ParamsQuery) => {
 // ================================
 
 const formatGov = (data: ParamsQuery) => {
+  console.log('formatGov', data.govParams);
   if (data.govParams.length) {
     const govParamsRaw = GovParams.fromJson(data?.govParams?.[0] ?? {});
     return {
@@ -92,6 +93,15 @@ const formatGov = (data: ParamsQuery) => {
       vetoThreshold:
         numeral(numeral(govParamsRaw.tallyParams.vetoThreshold).format('0.[00]')).value() ?? 0,
       votingPeriod: govParamsRaw.votingParams.votingPeriod,
+      expeditedMinDeposit: formatToken(
+        govParamsRaw.expeditedParams.expeditedMinDeposit?.[0]?.amount ?? 0,
+        govParamsRaw.expeditedParams.expeditedMinDeposit?.[0]?.denom ?? primaryTokenUnit
+      ),
+      expeditedThreshold:
+        numeral(
+          numeral(govParamsRaw.expeditedParams.expeditedThreshold).format('0.[00]')
+        ).value() ?? 0,
+      expeditedVotingPeriod: govParamsRaw.expeditedParams.expeditedVotingPeriod,
     };
   }
 

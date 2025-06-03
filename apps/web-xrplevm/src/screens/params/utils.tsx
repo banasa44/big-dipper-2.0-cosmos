@@ -159,4 +159,21 @@ export const formatGov = (data: Gov, t: TFunction) => [
     label: t('votingPeriod'),
     detail: convertBySeconds(nanoToSeconds(data.votingPeriod), t),
   },
+  {
+    key: 'expeditedMinDeposit',
+    label: t('expeditedMinDeposit'),
+    detail: `${
+      data.expeditedMinDeposit.value
+    } ${data.expeditedMinDeposit.displayDenom.toUpperCase()}`,
+  },
+  {
+    key: 'expeditedThreshold',
+    label: t('expeditedThreshold'),
+    detail: `${numeral(data.expeditedThreshold * 100).format('0.[00]')}%`,
+  },
+  {
+    key: 'expeditedVotingPeriod',
+    label: t('expeditedVotingPeriod'),
+    detail: convertBySeconds(nanoToSeconds(data.expeditedVotingPeriod), t),
+  },
 ];

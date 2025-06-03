@@ -37,6 +37,9 @@ export interface Gov {
   threshold: number;
   vetoThreshold: number;
   votingPeriod: number;
+  expeditedMinDeposit: TokenUnit;
+  expeditedThreshold: number;
+  expeditedVotingPeriod: number;
 }
 
 export interface ParamsState {
