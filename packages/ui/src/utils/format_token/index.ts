@@ -34,7 +34,8 @@ export const formatToken = (value: number | string | null | undefined, denom = '
   }
 
   const ratio = Big(10 ** selectedDenom.exponent);
-  results.value = !ratio.eq(0) ? Big(value).div(ratio).toFixed(selectedDenom.exponent) : '';
+  const rawValue = !ratio.eq(0) ? Big(value).div(ratio).toString() : '';
+  results.value = formatNumber(rawValue, selectedDenom.exponent);
   results.displayDenom = selectedDenom.display;
   return results;
 };
@@ -78,8 +79,8 @@ export const formatNumber = (tokenUnit: string, toFixed: number | null = null): 
   const formatWholeNumber = numeral(wholeNumber).format('0,0');
 
   // Limit toFixed to max 6
-  if (toFixed !== null && extra.displayDecimals && toFixed > extra.displayDecimals) {
-    toFixed = extra.displayDecimals;
+  if (toFixed !== null && extra.maxDisplayDecimals && toFixed > extra.maxDisplayDecimals) {
+    toFixed = extra.maxDisplayDecimals;
   }
 
   // in the event that there is actually decimals and tofixed has not been set to 0
