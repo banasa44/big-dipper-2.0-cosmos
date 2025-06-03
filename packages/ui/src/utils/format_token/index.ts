@@ -77,6 +77,11 @@ export const formatNumber = (tokenUnit: string, toFixed: number | null = null): 
   // add commas for fullnumber ex: 1000 -> 1,000
   const formatWholeNumber = numeral(wholeNumber).format('0,0');
 
+  // Limit toFixed to max 6
+  if (toFixed !== null && toFixed > 6) {
+    toFixed = 6;
+  }
+
   // in the event that there is actually decimals and tofixed has not been set to 0
   // we will handle the decimal
   if (decimal && toFixed !== 0) {
