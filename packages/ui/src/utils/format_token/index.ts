@@ -2,7 +2,7 @@ import Big from 'big.js';
 import numeral from 'numeral';
 import chainConfig from '@/chainConfig';
 
-const { tokenUnits } = chainConfig();
+const { tokenUnits, extra } = chainConfig();
 
 /**
  * Util to help me correctly transform a base denom amount
@@ -78,8 +78,8 @@ export const formatNumber = (tokenUnit: string, toFixed: number | null = null): 
   const formatWholeNumber = numeral(wholeNumber).format('0,0');
 
   // Limit toFixed to max 6
-  if (toFixed !== null && toFixed > 6) {
-    toFixed = 6;
+  if (toFixed !== null && extra.displayDecimals && toFixed > extra.displayDecimals) {
+    toFixed = extra.displayDecimals;
   }
 
   // in the event that there is actually decimals and tofixed has not been set to 0
