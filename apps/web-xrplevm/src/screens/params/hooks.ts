@@ -79,7 +79,6 @@ const formatDistribution = (data: ParamsQuery) => {
 // ================================
 
 const formatGov = (data: ParamsQuery) => {
-  console.log('formatGov', data.govParams);
   if (data.govParams.length) {
     const govParamsRaw = GovParams.fromJson(data?.govParams?.[0] ?? {});
     return {
