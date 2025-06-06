@@ -79,8 +79,8 @@ export const formatNumber = (tokenUnit: string, toFixed: number | null = null): 
   const formatWholeNumber = numeral(wholeNumber).format('0,0');
 
   // Limit toFixed to max 6
-  if (toFixed !== null && extra.maxDisplayDecimals && toFixed > extra.maxDisplayDecimals) {
-    toFixed = extra.maxDisplayDecimals;
+  if (toFixed !== null && extra.decimals && toFixed > extra.decimals) {
+    toFixed = extra.decimals;
   }
 
   // in the event that there is actually decimals and tofixed has not been set to 0

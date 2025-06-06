@@ -5,7 +5,7 @@
     "profile": true,
     "graphqlWs": false,
     "votingPowerExponent": 6,
-    "displayDecimals": 6
+    "decimals": 6
   },
   "previewImage": "https://peersyst-development.s3.eu-west-1.amazonaws.com/validators-explorer-preview.png",
   "themes": {
