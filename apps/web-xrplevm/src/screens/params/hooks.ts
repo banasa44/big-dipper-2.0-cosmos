@@ -93,13 +93,13 @@ const formatGov = (data: ParamsQuery) => {
         numeral(numeral(govParamsRaw.tallyParams.vetoThreshold).format('0.[00]')).value() ?? 0,
       votingPeriod: govParamsRaw.votingParams.votingPeriod,
       expeditedMinDeposit: formatToken(
-        govParamsRaw.expeditedParams.expeditedMinDeposit?.[0]?.amount ?? 0,
-        govParamsRaw.expeditedParams.expeditedMinDeposit?.[0]?.denom ?? primaryTokenUnit
+        govParamsRaw.expeditedParams.expeditedMinDeposit?.[0]?.amount ?? undefined,
+        govParamsRaw.expeditedParams.expeditedMinDeposit?.[0]?.denom ?? undefined
       ),
       expeditedThreshold:
         numeral(
           numeral(govParamsRaw.expeditedParams.expeditedThreshold).format('0.[00]')
-        ).value() ?? 0,
+        ).value() ?? undefined,
       expeditedVotingPeriod: govParamsRaw.expeditedParams.expeditedVotingPeriod,
     };
   }

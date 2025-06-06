@@ -162,18 +162,25 @@ export const formatGov = (data: Gov, t: TFunction) => [
   {
     key: 'expeditedMinDeposit',
     label: t('expeditedMinDeposit'),
-    detail: `${
-      data.expeditedMinDeposit.value
-    } ${data.expeditedMinDeposit.displayDenom.toUpperCase()}`,
+    detail:
+      data.expeditedMinDeposit !== undefined
+        ? `${data.expeditedMinDeposit.value} ${data.expeditedMinDeposit.displayDenom.toUpperCase()}`
+        : undefined,
   },
   {
     key: 'expeditedThreshold',
     label: t('expeditedThreshold'),
-    detail: `${numeral(data.expeditedThreshold * 100).format('0.[00]')}%`,
+    detail:
+      data.expeditedThreshold !== undefined
+        ? `${numeral(data.expeditedThreshold * 100).format('0.[00]')}%`
+        : undefined,
   },
   {
     key: 'expeditedVotingPeriod',
     label: t('expeditedVotingPeriod'),
-    detail: convertBySeconds(nanoToSeconds(data.expeditedVotingPeriod), t),
+    detail:
+      data.expeditedVotingPeriod !== undefined
+        ? convertBySeconds(nanoToSeconds(data.expeditedVotingPeriod), t)
+        : undefined,
   },
 ];

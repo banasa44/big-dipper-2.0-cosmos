@@ -19,12 +19,14 @@ class GovParams {
     votingPeriod: number;
   };
   public expeditedParams: {
-    expeditedMinDeposit: Array<{
-      denom: string;
-      amount: string;
-    }>;
-    expeditedThreshold: string;
-    expeditedVotingPeriod: number;
+    expeditedMinDeposit:
+      | Array<{
+          denom: string;
+          amount: string;
+        }>
+      | undefined;
+    expeditedThreshold: string | undefined;
+    expeditedVotingPeriod: number | undefined;
   };
 
   constructor(payload: object) {
@@ -54,9 +56,9 @@ class GovParams {
     );
     this.expeditedParams = R.pathOr(
       {
-        expeditedMinDeposit: [],
-        expeditedThreshold: '',
-        expeditedVotingPeriod: 0,
+        expeditedMinDeposit: undefined,
+        expeditedThreshold: undefined,
+        expeditedVotingPeriod: undefined,
       },
       ['params'],
       payload
@@ -85,16 +87,15 @@ class GovParams {
         votingPeriod: R.pathOr(0, ['votingParams', 'voting_period'], data),
       },
       expeditedParams: {
-        expeditedMinDeposit: R.pathOr<GovParams['expeditedParams']['expeditedMinDeposit']>(
-          [],
+        expeditedMinDeposit: R.path<GovParams['expeditedParams']['expeditedMinDeposit']>(
           ['params', 'expedited_min_deposit'],
           data
-        ).map((x) => ({
+        )?.map((x) => ({
           denom: x.denom,
           amount: String(x.amount),
         })),
-        expeditedThreshold: R.pathOr('0', ['params', 'expedited_threshold'], data),
-        expeditedVotingPeriod: R.pathOr(0, ['params', 'expedited_voting_period'], data),
+        expeditedThreshold: R.path(['params', 'expedited_threshold'], data),
+        expeditedVotingPeriod: R.path(['params', 'expedited_voting_period'], data),
       },
     };
   }
