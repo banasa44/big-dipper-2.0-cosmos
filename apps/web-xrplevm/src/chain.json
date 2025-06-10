@@ -323,8 +323,8 @@
         }
       },
       "endpoints": {
-        "graphql": "https://governance.private-mainnet.xrplevm.org/v1/graphql",
-        "graphqlWebsocket": "wss://governance.private-mainnet.xrplevm.org/v1/graphql",
+        "graphql": "https://governance-mainnet.aws.peersyst.tech/v1/graphql",
+        "graphqlWebsocket": "wss://governance-mainnet.aws.peersyst.tech/v1/graphql",
         "publicRpcWebsocket": "wss://tbd/websocket"
       },
       "marketing": {
