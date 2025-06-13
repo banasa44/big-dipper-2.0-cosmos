@@ -137,6 +137,7 @@ export interface ChainConfig extends ChainSettings {
     profile: boolean;
     graphqlWs: boolean;
     votingPowerExponent?: number;
+    decimals?: number;
   };
   basePath: string;
   previewImage?: string;
