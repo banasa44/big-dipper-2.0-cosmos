@@ -48,7 +48,7 @@ const Mobile: FC<MobileProps> = ({ className, items }) => {
                 <Typography variant="body1" className="value">
                   {x.erc20Address ? (
                     <Link
-                      href={`${explorerUrl}/token/${x.erc20Address}`}
+                      href={`${explorerUrl}/address/${x.erc20Address}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

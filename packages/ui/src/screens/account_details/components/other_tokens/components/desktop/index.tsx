@@ -63,7 +63,7 @@ const Desktop: FC<DesktopProps> = ({ className, items }) => {
                     <TableCell key={column.key} align={column.align}>
                       {row.erc20Address ? (
                         <Link
-                          href={`${explorerUrl}/token/${row.erc20Address}`}
+                          href={`${explorerUrl}/address/${row.erc20Address}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
