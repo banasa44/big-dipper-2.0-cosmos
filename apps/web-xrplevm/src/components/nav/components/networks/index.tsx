@@ -42,7 +42,7 @@ const Networks: FC<ComponentDefault> = ({ className }) => {
       devnet: [
         {
           chainId: 'xrpl-devnet',
-          url: 'https://egovernance.devnet.xrplevm.org/',
+          url: 'https://governance.devnet.xrplevm.org/',
           name: 'Devnet',
         },
       ],
