@@ -3,12 +3,13 @@ import { Tendermint34Client } from '@cosmjs/tendermint-rpc';
 import type { IbcExtension } from '@cosmjs/stargate';
 import { QueryClient, setupIbcExtension } from '@cosmjs/stargate';
 
+const { endpoints, chainType } = chainConfig();
+
 /**
  * Gets the current RPC endpoint for Cosmos from chain configuration
  * @returns The URL of the Cosmos RPC endpoint
  */
 export function getCurrentRpcEndpoint() {
-  const { endpoints } = chainConfig();
   if (!endpoints.cosmosRpc) {
     throw new Error('Cosmos RPC endpoint is not defined in chainConfig.');
   }
@@ -92,9 +93,19 @@ export async function fetchParseIbcDenom(denom: string): Promise<string> {
  */
 export async function getErc20AddressForDenom(denom: string): Promise<string | undefined> {
   const rpc = getCurrentRpcEndpoint();
-  const lcd = rpc.replace(/:26657$/, ':1317');
 
-  const url = `${lcd}/evmos/erc20/v1/token_pairs`;
+  let apiUrl: string;
+
+  // Check if it's mainnet to use different domain architecture
+  if (chainType === 'Mainnet') {
+    // Mainnet: Use dedicated API domain
+    apiUrl = rpc.replace('rpc', 'api');
+  } else {
+    // Testnet/Devnet: Use port-based architecture
+    apiUrl = rpc.replace(/:26657$/, ':1317');
+  }
+
+  const url = `${apiUrl}/evmos/erc20/v1/token_pairs`;
 
   try {
     const res = await fetch(url);
