@@ -330,7 +330,7 @@
         "graphql": "https://governance.private-mainnet.xrplevm.org/v1/graphql",
         "graphqlWebsocket": "wss://governance.private-mainnet.xrplevm.org/v1/graphql",
         "publicRpcWebsocket": "wss://tbd/websocket",
-        "cosmosRpc": "http://cosmos.xrplevm.org:26657",
+        "cosmosRpc": "https://cosmos-rpc.xrplevm.org",
         "blockExplorer": "https://explorer.xrplevm.org"
       },
       "marketing": {
