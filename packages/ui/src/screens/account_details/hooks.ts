@@ -432,6 +432,11 @@ export const useAccountRewards = () => {
         rewards: updatedRewards,
         loading: false,
       }));
+    } else {
+      handleSetState((prevState) => ({
+        ...prevState,
+        loading: false,
+      }));
     }
   }, [rewards, handleSetState]);
 
